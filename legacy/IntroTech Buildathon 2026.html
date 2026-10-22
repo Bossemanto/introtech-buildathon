@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>IntroTech Buildathon 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Unbounded:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ---------- Tokens (extracted from reference) ---------- */
+:root{
+  --canvas:#F8F6FB; --surface:#FFFFFF; --dot:#DAD3E6;
+  --ink:#1A0829; --body:#41354F; --muted:#7A6F88; --line:#E8E2EF;
+  --blue:#6A27A0; --blue-press:#561D84; --yellow:#F4277A;
+  --stage:#150227; --stage-2:#2A0A45; --stage-line:rgba(255,255,255,.05); --glass:rgba(255,255,255,.06); --glass-line:rgba(255,255,255,.12);
+  --chrome:linear-gradient(180deg,#F1F3F4 0%,#D4D8D9 45%,#A2A6A7 100%);
+  --pink:#F4277A; --sky-brand:#3490FB;
+  --purple:#9B5BE0; --glow:rgba(155,91,224,.22);
+  --sky:#DCEBFF; --sky-ink:#1F6FD6; --orange:#FFE0EC; --orange-ink:#C2185B;
+  --r-builder:#6A27A0; --r-engineer:#3490FB; --r-security:#1A0829; --r-creator:#F4277A; --r-marketing:#0E9F8E;
+  --tile-shadow:0 1px 2px rgba(5,0,56,.06),0 8px 24px rgba(5,0,56,.07);
+  --font:"Montserrat",ui-sans-serif,"Helvetica Neue",Helvetica,Arial,sans-serif;
+  --display:"Unbounded","Montserrat",ui-sans-serif,Arial,sans-serif;
+  --maxw:1180px;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --canvas:#120420; --surface:#1E1030; --dot:#2E1C44;
+    --ink:#F4EEFA; --body:#C9C8DA; --muted:#8E8CA6; --line:#33224A;
+    --glow:rgba(143,107,244,.16); --sky:#0E2647; --sky-ink:#8CC0FF; --orange:#3A0E24; --orange-ink:#FF7DB0;
+    --r-security:#F4EEFA; --blue:#8A44C8; --blue-press:#9B5BE0; --tile-shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="dark"]{
+  --canvas:#120420; --surface:#1E1030; --dot:#2E1C44;
+  --ink:#F4EEFA; --body:#C9C8DA; --muted:#8E8CA6; --line:#33224A;
+  --glow:rgba(143,107,244,.16); --sky:#0E2647; --sky-ink:#8CC0FF; --orange:#3A0E24; --orange-ink:#FF7DB0;
+  --r-security:#F4EEFA; --blue:#8A44C8; --blue-press:#9B5BE0; --tile-shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35);
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:calc(72px + env(safe-area-inset-top,0px))}
+body{
+  margin:0;font-family:var(--font);color:var(--ink);background-color:var(--canvas);
+  background-image:radial-gradient(var(--dot) 1.2px,transparent 1.3px);
+  background-size:24px 24px;
+  -webkit-font-smoothing:antialiased;line-height:1.5;font-size:17px;
+}
+img{max-width:100%}
+a{color:inherit}
+button,input,textarea,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:6px}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* ---------- Nav ---------- */
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--canvas) 86%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;gap:32px;height:68px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:700;font-size:18px;letter-spacing:-.01em}
+.brand-mark{width:34px;height:22px;background:currentColor;-webkit-mask:url(data:image/png;base64,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) center/contain no-repeat;mask:url(data:image/png;base64,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) center/contain no-repeat;flex:none}
+.brand{color:var(--ink)}
+.nav-links{display:flex;gap:4px;flex:1}
+.nav-links a{text-decoration:none;padding:8px 14px;border-radius:6px;font-weight:500;color:var(--body);font-size:16px}
+.nav-links a:hover{background:color-mix(in srgb,var(--ink) 5%,transparent)}
+.nav-links a[aria-current="page"]{color:var(--ink);font-weight:600}
+.tabbar{display:none}
+
+/* ---------- Buttons ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;cursor:pointer;text-decoration:none;
+  font-weight:700;font-size:17px;padding:15px 28px;border-radius:6px;background:var(--blue);color:#fff;transition:background .15s}
+.btn:hover{background:var(--blue-press)}
+.btn.sm{font-size:15px;padding:10px 18px}
+.btn.ghost{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--line)}
+.btn.ghost:hover{box-shadow:inset 0 0 0 1.5px var(--ink);background:transparent}
+.btn.voted{background:var(--surface);color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink);cursor:default}
+.btn[disabled]{opacity:.6;cursor:not-allowed}
+
+/* ---------- Tiles (signature component) ---------- */
+.tile{font-family:var(--display);width:96px;height:96px;border-radius:22px;background:var(--surface);box-shadow:var(--tile-shadow);
+  display:grid;place-items:center;flex:none;font-weight:800;font-size:34px;letter-spacing:-.04em;line-height:1}
+.tile.yellow{background:var(--stage);color:#D4D8D9}
+.tile.yellow span,.chrome{background:var(--chrome);-webkit-background-clip:text;background-clip:text;color:transparent}
+.tile.s{width:52px;height:52px;border-radius:13px;font-size:19px}
+.tile.m{width:72px;height:72px;border-radius:17px;font-size:26px}
+.tile.l{width:120px;height:120px;border-radius:28px;font-size:44px}
+
+/* ---------- Cursor pills (signature component) ---------- */
+.cursor{position:absolute;display:flex;flex-direction:column;align-items:flex-start;gap:2px;pointer-events:none}
+.cursor svg{width:22px;height:22px}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:4px 14px;font-size:20px;font-weight:500;border:1.5px solid currentColor;white-space:nowrap;line-height:1.3}
+.pill.sky{background:var(--sky);color:var(--sky-ink)}
+.pill.orange{background:var(--orange);color:var(--orange-ink)}
+.pill.purple{background:var(--surface);color:var(--purple)}
+.pill.small{font-size:14px;padding:2px 10px;border-width:1.25px}
+.sparkle{position:absolute;color:var(--purple);pointer-events:none}
+
+/* ---------- Hero ---------- */
+.hero{position:relative;text-align:center;padding:80px 0 112px;overflow:hidden;color:#F4EEFA;
+  background:linear-gradient(var(--stage-line) 1px,transparent 1px) 0 0/48px 48px,linear-gradient(90deg,var(--stage-line) 1px,transparent 1px) 0 0/48px 48px,radial-gradient(120% 90% at 50% 0%,var(--stage-2),var(--stage) 70%)}
+.hero .tile[style*="r-security"]{color:#F4EEFA!important}
+.hero .tile[style*="r-builder"]{color:#B57BF0!important}
+.hero .tile{background:#241238;box-shadow:inset 0 0 0 1px var(--glass-line),0 12px 30px rgba(0,0,0,.35);backdrop-filter:blur(6px)}
+.hero .tile.yellow{background:#1E1030;box-shadow:inset 0 0 0 1px var(--glass-line),0 0 0 6px rgba(155,91,224,.18),0 20px 50px rgba(106,39,160,.5)}
+.hero .kicker{color:#CDBEE0}
+.hero .btn.ghost{color:#F4EEFA;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.28)}
+.hero .btn.ghost:hover{box-shadow:inset 0 0 0 1.5px #fff}
+.hero .pill.purple{background:#1E1030}
+.hero::before{content:"";position:absolute;inset:10% -10% 0;background:
+  radial-gradient(40% 45% at 22% 55%,var(--glow),transparent 70%),
+  radial-gradient(40% 45% at 78% 50%,var(--glow),transparent 70%);pointer-events:none}
+.tilerow{position:relative;display:flex;justify-content:center;align-items:center;gap:0;margin-bottom:64px}
+.tilerow .stack{display:flex;align-items:center;margin:0 28px}
+.tilerow .stack .tile{margin-left:-22px}
+.tilerow .stack .tile:first-child{margin-left:0}
+.tilerow .tile.yellow{z-index:2}
+.hero h1{position:relative;font-family:var(--display);font-size:clamp(34px,5vw,64px);font-weight:600;letter-spacing:-.03em;line-height:1.08;margin:18px auto 26px;max-width:16ch;background:var(--chrome);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .lede{position:relative;font-size:clamp(17px,1.5vw,20px);color:#CDBEE0;max-width:40ch;margin:0 auto 40px;line-height:1.5}
+.hero .ctas{position:relative;display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.kicker{position:relative;display:inline-block;font-weight:600;font-size:15px;letter-spacing:.18em;color:var(--body)}
+.tilerow .tile{opacity:0;transform:translateY(14px) scale(.96);animation:rise .6s cubic-bezier(.2,.7,.2,1) forwards}
+@keyframes rise{to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.tilerow .tile{animation:none;opacity:1;transform:none}}
+
+/* ---------- Sections ---------- */
+section.block{padding:96px 0;border-top:1px solid var(--line)}
+.h2{font-family:var(--display);font-size:clamp(28px,3.4vw,44px);font-weight:500;letter-spacing:-.03em;line-height:1.1;margin:0 0 18px;max-width:20ch}
+.sub{font-size:20px;color:var(--body);max-width:52ch;margin:0}
+.sheet{background:var(--surface);border-radius:20px;box-shadow:var(--tile-shadow)}
+
+.prize{display:grid;grid-template-columns:1.3fr 1fr;gap:56px;align-items:center}
+.prize-amount{font-family:var(--display);font-size:clamp(52px,8.6vw,120px);font-weight:600;letter-spacing:-.05em;line-height:.95;margin:6px 0 0}
+.winners{display:flex;flex-direction:column;gap:0}
+.winner{display:flex;align-items:center;gap:20px;padding:22px 0;border-bottom:1px solid var(--line)}
+.winner:last-child{border-bottom:0}
+.winner b{display:block;font-size:22px;font-weight:600;letter-spacing:-.01em}
+.winner span{color:var(--muted);font-size:16px}
+
+.roles{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-top:48px}
+.role{padding:26px 22px 24px;border-radius:20px;background:var(--surface);box-shadow:var(--tile-shadow)}
+.role .tile{margin-bottom:22px}
+.role h3{margin:0 0 6px;font-size:19px;font-weight:600;letter-spacing:-.01em}
+.role p{margin:0;font-size:15px;color:var(--muted);line-height:1.45}
+
+.part{text-align:center;padding:120px 0}
+.part p{font-family:var(--display);font-size:clamp(28px,4.4vw,58px);font-weight:500;letter-spacing:-.035em;line-height:1.1;margin:0}
+.part p + p{color:var(--muted)}
+
+.loop{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:48px;border-top:1.5px solid var(--ink)}
+.loop div{padding:22px 24px 0 0}
+.loop i{font-style:normal;font-size:15px;color:var(--muted);font-weight:600}
+.loop h3{font-family:var(--display);font-size:clamp(24px,2.8vw,36px);font-weight:600;letter-spacing:-.035em;margin:6px 0 10px}
+.loop p{margin:0;color:var(--body);font-size:16px;max-width:24ch}
+
+.closing{text-align:center;padding:110px 0 130px;border-top:1px solid var(--line)}
+.closing .h2{margin:0 auto 32px}
+footer{border-top:1px solid var(--line);padding:28px 0 40px;color:var(--muted);font-size:14px}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+/* ---------- Event strip (from the conference flyer) ---------- */
+.event{background:var(--stage);color:#F4EEFA;padding:0 0 56px}
+.event-bar{display:grid;grid-template-columns:auto 1fr auto;align-items:center;background:#1E1722;border:1px solid var(--glass-line);border-radius:18px;overflow:hidden}
+.event-bar > div{padding:26px 34px}
+.event-bar > div + div{border-left:1px solid;border-image:linear-gradient(transparent,#9B5BE0,transparent) 1}
+.ev-date{font-family:var(--display);font-weight:600;font-size:26px;line-height:1.05;letter-spacing:-.02em}
+.ev-date span{display:block;font-weight:400}
+.ev-venue b{display:block;font-weight:700;font-size:20px;letter-spacing:.02em}
+.ev-venue span{color:#CDBEE0;font-size:15px}
+.ev-time{font-family:var(--display);font-size:34px;font-weight:600;letter-spacing:-.03em}
+.ev-time span{font-weight:400}
+.ev-reg{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:14px;padding:14px 22px;border-radius:12px;background:linear-gradient(90deg,#682586,#6C1A57 60%,#3A0E34)}
+.ev-reg p{margin:0;font-size:15px;color:#E6D9F2}
+.ev-reg a{color:#fff;font-weight:600;letter-spacing:.08em;text-decoration:none;font-size:15px}
+.ev-reg a:hover{text-decoration:underline}
+.closing{background:linear-gradient(var(--stage-line) 1px,transparent 1px) 0 0/48px 48px,linear-gradient(90deg,var(--stage-line) 1px,transparent 1px) 0 0/48px 48px,radial-gradient(120% 100% at 50% 100%,var(--stage-2),var(--stage) 70%);color:#F4EEFA;border-top:0}
+.closing .h2{background:var(--chrome);-webkit-background-clip:text;background-clip:text;color:transparent;max-width:22ch}
+.closing .hero{background:none}
+
+/* ---------- Page headers ---------- */
+.phead{padding:64px 0 40px}
+.phead h1{font-family:var(--display);font-size:clamp(32px,4.4vw,54px);font-weight:500;letter-spacing:-.035em;line-height:1.06;margin:0 0 14px}
+
+/* ---------- Leaderboard ---------- */
+.board{overflow:hidden}
+.lb-head,.lb-row{display:grid;grid-template-columns:72px 64px minmax(220px,2fr) 92px 92px minmax(150px,1fr);gap:18px;align-items:center;padding:0 28px}
+.lb-head{height:52px;font-size:14px;color:var(--muted);font-weight:500;border-bottom:1px solid var(--line)}
+.lb-row{min-height:96px;border-bottom:1px solid var(--line);text-decoration:none;cursor:pointer;transition:background .12s}
+.lb-row:last-child{border-bottom:0}
+.lb-row:hover{background:color-mix(in srgb,var(--ink) 3%,transparent)}
+.rank{font-family:var(--display);font-size:34px;font-weight:600;letter-spacing:-.05em;color:var(--muted);font-variant-numeric:tabular-nums}
+.lb-row.top .rank{color:var(--ink)}
+.lb-row.first{background:color-mix(in srgb,var(--blue) 8%,transparent)}
+.lb-team b{display:block;font-size:19px;font-weight:600;letter-spacing:-.01em}
+.lb-team span{font-size:15px;color:var(--muted);display:block;max-width:48ch;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.num{font-size:22px;font-weight:600;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.num small{display:none}
+.move{font-size:13px;color:var(--muted);font-weight:500}
+.move.up{color:var(--r-marketing)}
+.bar{height:6px;border-radius:99px;background:color-mix(in srgb,var(--ink) 9%,transparent);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--blue);border-radius:99px}
+.barlabel{display:flex;justify-content:space-between;font-size:14px;color:var(--muted);margin-bottom:8px;font-variant-numeric:tabular-nums}
+.board-wrap{overflow-x:auto;border-radius:20px}
+
+/* ---------- Team cards ---------- */
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-top:28px}
+.chip{border:1.5px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 16px;font-size:15px;font-weight:500;cursor:pointer}
+.chip[aria-pressed="true"]{border-color:var(--ink);background:var(--ink);color:var(--canvas)}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;padding-bottom:110px}
+.card{display:flex;flex-direction:column;padding:28px;border-radius:22px;background:var(--surface);box-shadow:var(--tile-shadow);position:relative}
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:26px}
+.card-pos{font-size:14px;color:var(--muted);font-weight:500;text-align:right}
+.card-pos b{display:block;font-family:var(--display);font-size:26px;color:var(--ink);letter-spacing:-.04em;font-weight:600;line-height:1}
+.card h3{margin:0;font-size:24px;font-weight:600;letter-spacing:-.02em}
+.card .prod{margin:2px 0 10px;font-weight:500;color:var(--blue)}
+.card p.desc{margin:0 0 24px;color:var(--body);font-size:16px;line-height:1.5;flex:1}
+.stats{display:flex;gap:28px;margin-bottom:20px}
+.stat b{display:block;font-size:24px;letter-spacing:-.03em;font-weight:600;font-variant-numeric:tabular-nums}
+.stat span{font-size:14px;color:var(--muted)}
+.members{display:flex;margin:22px 0 24px}
+.av{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:700;color:#fff;border:2px solid var(--surface);margin-left:-8px}
+.av:first-child{margin-left:0}
+.card-actions{display:flex;gap:10px}
+.card-actions .btn{flex:1}
+
+/* ---------- Team detail ---------- */
+.back{display:inline-block;margin:36px 0 0;font-weight:500;color:var(--muted);text-decoration:none;font-size:15px}
+.back:hover{color:var(--ink)}
+.t-hero{display:grid;grid-template-columns:1fr 360px;gap:48px;padding:36px 0 64px;align-items:start}
+.t-hero h1{font-family:var(--display);font-size:clamp(38px,5.2vw,68px);font-weight:500;letter-spacing:-.045em;line-height:1;margin:26px 0 12px}
+.t-hero .prod{font-size:24px;font-weight:600;letter-spacing:-.01em;color:var(--blue);margin:0 0 14px}
+.t-hero .sub{font-size:19px}
+.votebox{padding:30px}
+.votebox .big{font-family:var(--display);font-size:54px;font-weight:600;letter-spacing:-.05em;line-height:1;font-variant-numeric:tabular-nums}
+.votebox .lbl{color:var(--muted);font-size:15px;margin:6px 0 24px}
+.votebox .btn{width:100%;font-size:18px;padding:18px}
+.votebox .note{font-size:14px;color:var(--muted);margin:14px 0 0;text-align:center;min-height:1.4em}
+.vb-stats{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line);margin-top:24px;padding-top:20px}
+.vb-stats div b{display:block;font-size:26px;font-weight:600;letter-spacing:-.03em}
+.vb-stats div span{font-size:14px;color:var(--muted)}
+.bump{animation:bump .45s ease}
+@keyframes bump{40%{transform:scale(1.08)}}
+@media (prefers-reduced-motion:reduce){.bump{animation:none}}
+
+.dept{padding:40px 40px 18px}
+.dept-row{display:grid;grid-template-columns:220px 1fr;gap:28px;align-items:center;padding:20px 0 30px}
+.dept-row + .dept-row{border-top:1px solid var(--line)}
+.dept-name{display:flex;align-items:center;gap:14px;font-weight:600;font-size:17px}
+.track{position:relative;height:8px;border-radius:99px;background:color-mix(in srgb,var(--ink) 8%,transparent)}
+.track i{position:absolute;left:0;top:0;bottom:0;border-radius:99px;width:0;transition:width 1s cubic-bezier(.2,.7,.2,1)}
+.track .cur{position:absolute;top:-6px;transform:translateX(-4px);transition:left 1s cubic-bezier(.2,.7,.2,1);display:flex;align-items:flex-start;gap:0}
+.track .cur svg{width:18px;height:18px;flex:none}
+.track .cur .pill{margin-top:14px;margin-left:-4px;font-size:14px;font-weight:600;padding:2px 10px;background:var(--surface)}
+@media (prefers-reduced-motion:reduce){.track i,.track .cur{transition:none}}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:20px}
+.panel{padding:34px 36px}
+.panel h2{font-size:26px;font-weight:600;letter-spacing:-.02em;margin:0 0 22px}
+.member{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--line)}
+.member:last-child{border-bottom:0}
+.member .av{width:42px;height:42px;margin:0;font-size:15px;border:0}
+.member b{display:block;font-weight:600}
+.member span{font-size:15px;color:var(--muted)}
+.demo{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:22px;padding-top:22px;border-top:1px solid var(--line)}
+.demo a{font-weight:600;color:var(--blue);text-decoration:none;word-break:break-all}
+.miles{list-style:none;margin:0;padding:0;position:relative}
+.miles li{position:relative;padding:0 0 22px 34px}
+.miles li::before{content:"";position:absolute;left:7px;top:22px;bottom:-2px;width:1.5px;background:var(--line)}
+.miles li:last-child::before{display:none}
+.miles li::after{content:"";position:absolute;left:0;top:5px;width:16px;height:16px;border-radius:50%;box-shadow:inset 0 0 0 1.5px var(--muted);background:var(--surface)}
+.miles li.done::after{background:var(--blue);box-shadow:none}
+.miles li.now::after{background:var(--pink);box-shadow:0 0 0 4px color-mix(in srgb,var(--pink) 20%,transparent)}
+.miles b{display:block;font-weight:600}
+.miles span{font-size:15px;color:var(--muted)}
+.log{margin-top:20px;padding:34px 36px 20px;margin-bottom:110px}
+.log-item{display:grid;grid-template-columns:110px 1fr;gap:24px;padding:18px 0;border-top:1px solid var(--line)}
+.log-item time{color:var(--muted);font-size:15px;font-variant-numeric:tabular-nums}
+.log-item b{font-weight:600}
+.log-item p{margin:4px 0 0;color:var(--body);font-size:16px}
+
+/* ---------- Registration ---------- */
+.reg{display:grid;grid-template-columns:1fr 1.25fr;gap:64px;padding:64px 0 110px;align-items:start}
+.reg-side{position:sticky;top:110px}
+.reg-side h1{font-family:var(--display);font-size:clamp(32px,4.2vw,52px);font-weight:500;letter-spacing:-.04em;line-height:1.04;margin:0 0 18px}
+.form{padding:40px}
+fieldset{border:0;padding:0;margin:0 0 28px}
+legend,.flabel{display:block;font-weight:600;font-size:16px;margin-bottom:10px}
+.rolepick{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.rolepick label{display:flex;align-items:center;gap:14px;padding:12px 14px;border-radius:14px;box-shadow:inset 0 0 0 1.5px var(--line);cursor:pointer;font-weight:500;transition:box-shadow .12s}
+.rolepick label:hover{box-shadow:inset 0 0 0 1.5px var(--muted)}
+.rolepick input{position:absolute;opacity:0}
+.rolepick input:checked + label{box-shadow:inset 0 0 0 2px var(--blue);background:color-mix(in srgb,var(--blue) 5%,transparent)}
+.rolepick input:focus-visible + label{outline:2px solid var(--blue);outline-offset:3px}
+.rolepick .tile{box-shadow:inset 0 0 0 1px var(--line)}
+.field{margin-bottom:22px}
+.field input,.field textarea{width:100%;border:1.5px solid var(--line);background:var(--surface);border-radius:8px;padding:13px 14px;font-size:17px;transition:border-color .12s}
+.field textarea{min-height:104px;resize:vertical;line-height:1.45}
+.field input:focus,.field textarea:focus{outline:0;border-color:var(--blue)}
+.field .hint{font-size:14px;color:var(--muted);margin-top:6px}
+.field.err input,.field.err textarea{border-color:#D93A3A}
+.errmsg{color:#D93A3A;font-size:14px;margin-top:6px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.done{text-align:center;padding:56px 40px}
+.done .tile{margin:0 auto 26px}
+.done h2{font-family:var(--display);font-size:30px;font-weight:600;letter-spacing:-.03em;margin:0 0 10px}
+
+/* ---------- Toast ---------- */
+.toast{position:fixed;left:50%;bottom:calc(28px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);opacity:0;background:var(--ink);color:var(--canvas);padding:12px 20px;border-radius:999px;font-weight:600;font-size:15px;transition:.25s;z-index:50;pointer-events:none}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* ---------- Responsive ---------- */
+@media (max-width:1060px){
+  .roles{grid-template-columns:repeat(3,1fr)}
+  .cards{grid-template-columns:1fr 1fr}
+  .t-hero{grid-template-columns:1fr}
+  .votebox{max-width:520px}
+}
+@media (max-width:760px){
+  body{font-size:16px}
+  .wrap{padding:0 20px}
+  .nav .wrap{height:58px}
+  .nav-links,.nav .btn{display:none}
+  .tabbar{display:grid;grid-template-columns:repeat(4,1fr);position:fixed;left:0;right:0;bottom:0;z-index:30;
+    background:color-mix(in srgb,var(--surface) 92%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+  .tabbar a{text-align:center;text-decoration:none;font-size:13px;font-weight:600;color:var(--muted);padding:12px 4px 14px;position:relative}
+  .tabbar a[aria-current="page"]{color:var(--ink)}
+  .tabbar a[aria-current="page"]::before{content:"";position:absolute;top:0;left:30%;right:30%;height:3px;border-radius:0 0 3px 3px;background:var(--blue)}
+  main{padding-bottom:64px}
+  .toast{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+  .hero{padding:44px 0 72px}
+  .tilerow{margin-bottom:40px}
+  .event-bar{grid-template-columns:auto 1fr}
+  .event-bar > div{padding:20px 22px}
+  .event-bar .ev-venue{grid-column:1/-1;order:3;border-left:0!important;border-top:1px solid var(--glass-line)}
+  .ev-date{font-size:22px}.ev-time{font-size:28px;text-align:right}
+  .tilerow .tile{width:58px;height:58px;border-radius:15px;font-size:20px}
+  .tilerow .tile.l{width:84px;height:84px;border-radius:21px;font-size:28px}
+  .tilerow .stack{margin:0 10px}
+  .tilerow .stack .tile{margin-left:-16px}
+  .tilerow .solo{display:none}
+  .cursor.hide-m,.sparkle.hide-m{display:none}
+  .pill{font-size:16px}
+  .hero .ctas .btn{width:100%}
+  section.block{padding:72px 0}
+  .prize{grid-template-columns:1fr;gap:28px}
+  .roles{grid-template-columns:1fr;gap:0;background:var(--surface);border-radius:20px;box-shadow:var(--tile-shadow);margin-top:32px}
+  .role{display:grid;grid-template-columns:52px 1fr;gap:16px;align-items:center;box-shadow:none;background:none;border-radius:0;padding:18px 20px;border-bottom:1px solid var(--line)}
+  .role:last-child{border-bottom:0}
+  .role .tile{margin:0;width:52px;height:52px;border-radius:13px;font-size:19px;box-shadow:inset 0 0 0 1px var(--line)}
+  .part{padding:84px 0}
+  .loop{grid-template-columns:1fr 1fr;row-gap:28px}
+  .phead{padding:40px 0 28px}
+  /* leaderboard becomes stacked rows */
+  .lb-head{display:none}
+  .lb-row{grid-template-columns:44px 1fr auto;grid-template-areas:"rank team score" "rank prog prog";gap:6px 14px;padding:18px 18px;min-height:0}
+  .lb-row .rank{grid-area:rank;font-size:28px;align-self:start}
+  .lb-row .lb-tile{display:none}
+  .lb-row .lb-team{grid-area:team}
+  .lb-row .lb-score{grid-area:score;text-align:right}
+  .lb-row .lb-votes{display:none}
+  .lb-row .lb-prog{grid-area:prog;margin-top:8px}
+  .num small{display:block;font-size:12px;color:var(--muted);font-weight:500;letter-spacing:0}
+  .lb-team span{white-space:normal}
+  .cards{grid-template-columns:1fr}
+  .card{padding:24px}
+  .dept{padding:28px 22px 8px}
+  .dept-row{grid-template-columns:1fr;gap:14px;padding:16px 0 34px}
+  .grid2{grid-template-columns:1fr}
+  .panel,.log{padding:26px 22px}
+  .log-item{grid-template-columns:1fr;gap:4px}
+  .t-hero{padding:24px 0 40px;gap:28px}
+  .reg{grid-template-columns:1fr;gap:28px;padding:40px 0 80px}
+  .reg-side{position:static}
+  .form{padding:24px 20px}
+  .rolepick,.row2{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="arrow" viewBox="0 0 24 24"><path d="M3 2.5 20.5 10 12.6 12.6 10 20.5Z" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></symbol>
+  <symbol id="arrow-o" viewBox="0 0 24 24"><path d="M3 2.5 20.5 10 12.6 12.6 10 20.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+  <symbol id="cross" viewBox="0 0 24 24"><path d="M9 1h6v8h8v6h-8v8H9v-8H1V9h8Z" fill="currentColor"/></symbol>
+  <symbol id="tri" viewBox="0 0 24 24"><path d="M3 3 22 11 3 21Z" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+  <symbol id="spark" viewBox="0 0 24 24"><path d="M12 0c.8 6.3 5.2 10.9 12 12-6.8 1.1-11.2 5.7-12 12-.8-6.3-5.2-10.9-12-12C6.8 10.9 11.2 6.3 12 0Z" fill="currentColor"/></symbol>
+</svg>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#/"><span class="brand-mark" role="img" aria-label="IntroTech"></span>IntroTech Buildathon</a>
+    <nav class="nav-links" aria-label="Main">
+      <a href="#/" data-nav="home">Home</a>
+      <a href="#/teams" data-nav="teams">Teams</a>
+      <a href="#/leaderboard" data-nav="leaderboard">Leaderboard</a>
+      <a href="#/register" data-nav="register">Register</a>
+    </nav>
+    <a class="btn sm" href="#/register">Join the Buildathon</a>
+  </div>
+</header>
+
+<main id="app" tabindex="-1"></main>
+
+<nav class="tabbar" aria-label="Main">
+  <a href="#/" data-nav="home">Home</a>
+  <a href="#/teams" data-nav="teams">Vote</a>
+  <a href="#/leaderboard" data-nav="leaderboard">Ranks</a>
+  <a href="#/register" data-nav="register">Register</a>
+</nav>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* =========================================================
+   DATA — shaped like rows from Airtable / Supabase.
+   Replace the functions in `api` below to connect a backend.
+   ========================================================= */
+const ROLES = [
+  {id:"builder",   name:"AI Builder",              short:"AI Builder",   mono:"Ab", color:"var(--r-builder)",   blurb:"Turns an idea into a working product fast, with no-code and AI tools."},
+  {id:"engineer",  name:"AI Engineer",             short:"AI Engineer",  mono:"Ae", color:"var(--r-engineer)",  blurb:"Owns the models, data and code that make the product actually work."},
+  {id:"security",  name:"Cybersecurity Engineer",  short:"Cybersecurity",mono:"Cy", color:"var(--r-security)",  blurb:"Tries to break it before anyone else does, then helps fix it."},
+  {id:"creator",   name:"Creator / Content Creator",short:"Creator / Content",mono:"Cr", color:"var(--r-creator)", blurb:"Tells the story: demos, videos, posts and the pitch people remember."},
+  {id:"marketing", name:"Digital Marketer",        short:"Digital Marketing",mono:"Dm", color:"var(--r-marketing)", blurb:"Finds the first users and gets the public to vote."}
+];
+
+const TEAMS = [
+  {id:"kora-labs", name:"Kora Labs", initials:"KL", color:"#6A27A0",
+   product:"Ledgerline", tagline:"Bookkeeping for market traders, kept through WhatsApp voice notes.",
+   description:"Traders send a voice note after each sale. Ledgerline transcribes it in English, Pidgin or Yoruba, keeps the books, and sends a simple daily summary.",
+   score:91.4, votes:2148, prevRank:2, demo:"https://ledgerline.demo.introtech.ng",
+   progress:{builder:82, engineer:76, security:68, creator:91, marketing:73},
+   members:[["Tolu Adebayo","builder"],["Chidi Okafor","engineer"],["Ifeoma Nwosu","security"],["Bisola Ade","creator"],["Musa Danjuma","marketing"]],
+   milestones:[["Team formed","Week 1","done"],["Working prototype","Week 2","done"],["Security review","Week 3","now"],["Public demo day","Week 4","next"]],
+   updates:[["Oct 4","Voice notes in Yoruba now transcribe correctly","Accuracy went from 71% to 88% after retraining on 400 market recordings."],["Oct 2","First 40 traders onboarded at Balogun market","Musa ran a stand at the market entrance for two mornings."],["Sep 29","Prototype live","Daily summaries now arrive at 8pm on WhatsApp."]]},
+  {id:"third-mainland", name:"Third Mainland", initials:"TM", color:"#3490FB",
+   product:"Tutor Thirteen", tagline:"WAEC revision tutor that explains in Pidgin or English.",
+   description:"Students photograph a past question. Tutor Thirteen walks through the answer step by step and sets a short follow-up quiz.",
+   score:89.7, votes:2610, prevRank:1, demo:"https://tutor13.demo.introtech.ng",
+   progress:{builder:88, engineer:81, security:62, creator:84, marketing:90},
+   members:[["Amaka Eze","builder"],["Kunle Bello","engineer"],["Zainab Yusuf","security"],["Efe Omoregie","creator"],["Seun Akin","marketing"]],
+   milestones:[["Team formed","Week 1","done"],["Working prototype","Week 2","done"],["Security review","Week 3","now"],["Public demo day","Week 4","next"]],
+   updates:[["Oct 3","1,200 students tried it this week","Mostly through three school WhatsApp groups in Surulere."],["Sep 30","Maths and physics supported","Chemistry diagrams are next."]]},
+  {id:"blackbox", name:"Blackbox", initials:"Bx", color:"#1A0829",
+   product:"Shieldwall", tagline:"Catches phishing and fake transfer alerts in small business inboxes.",
+   description:"Shieldwall checks emails and SMS alerts against known scam patterns and flags fake bank credit alerts before staff release goods.",
+   score:87.2, votes:1534, prevRank:3, demo:"https://shieldwall.demo.introtech.ng",
+   progress:{builder:70, engineer:85, security:96, creator:66, marketing:61},
+   members:[["Daniel Etim","security"],["Halima Sani","engineer"],["Obi Uche","builder"],["Rita Okon","creator"],["Femi Ola","marketing"]],
+   milestones:[["Team formed","Week 1","done"],["Working prototype","Week 2","done"],["Security review","Week 3","done"],["Public demo day","Week 4","now"]],
+   updates:[["Oct 4","Flagged 37 fake credit alerts in pilot shops","Zero false positives on real alerts so far."],["Oct 1","Red-team week complete","Every other team's product was tested by Daniel."]]},
+  {id:"harmattan", name:"Harmattan", initials:"Hm", color:"#F4277A",
+   product:"Farmgate", tagline:"Daily crop prices for smallholder farmers, by SMS.",
+   description:"Farmgate collects prices from buyers in nearby markets and sends farmers the best place to sell each morning, no smartphone needed.",
+   score:84.9, votes:1902, prevRank:5, demo:"https://farmgate.demo.introtech.ng",
+   progress:{builder:79, engineer:72, security:58, creator:88, marketing:80},
+   members:[["Ngozi Ibe","builder"],["Yakubu Garba","engineer"],["Lanre Shittu","security"],["Joy Udo","creator"],["Kemi Fash","marketing"]],
+   milestones:[["Team formed","Week 1","done"],["Working prototype","Week 2","done"],["Security review","Week 3","now"],["Public demo day","Week 4","next"]],
+   updates:[["Oct 3","Price feed covers 6 markets in Kaduna","Buyers update prices by replying to an SMS."]]},
+  {id:"okada", name:"Okada Collective", initials:"OC", color:"#0E9F8E",
+   product:"RouteSense", tagline:"Smarter dispatch for delivery riders in Lagos traffic.",
+   description:"RouteSense groups deliveries and suggests rider routes using live traffic reports from the riders themselves.",
+   score:81.3, votes:1287, prevRank:4, demo:"https://routesense.demo.introtech.ng",
+   progress:{builder:74, engineer:69, security:64, creator:72, marketing:77},
+   members:[["Emeka Obi","engineer"],["Sade Bankole","builder"],["Ahmed Bala","security"],["Tife Ojo","creator"],["Uche Nnaji","marketing"]],
+   milestones:[["Team formed","Week 1","done"],["Working prototype","Week 2","now"],["Security review","Week 3","next"],["Public demo day","Week 4","next"]],
+   updates:[["Oct 2","Pilot with 12 riders in Yaba","Average delivery time down 14 minutes."]]},
+  {id:"signal-noise", name:"Signal & Noise", initials:"SN", color:"#9B5BE0",
+   product:"Clinic Queue", tagline:"SMS queueing and triage for primary health centres.",
+   description:"Patients join the queue by SMS and get called back when it's their turn, so nobody waits outside all morning.",
+   score:78.6, votes:964, prevRank:6, demo:"https://clinicqueue.demo.introtech.ng",
+   progress:{builder:68, engineer:63, security:71, creator:60, marketing:55},
+   members:[["Funmi Alabi","builder"],["Ikenna Eze","engineer"],["Grace Akpan","security"],["Bayo Lawal","creator"],["Nkechi Obi","marketing"]],
+   milestones:[["Team formed","Week 1","done"],["Working prototype","Week 2","now"],["Security review","Week 3","next"],["Public demo day","Week 4","next"]],
+   updates:[["Oct 1","Talking to two PHCs in Ibadan","Testing starts next week."]]}
+];
+
+/* ---------- Data access layer (swap for fetch() calls later) ---------- */
+const store = {
+  get(k,f){try{const v=localStorage.getItem(k);return v?JSON.parse(v):f}catch(e){return f}},
+  set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+};
+const api = {
+  myVotes(){return new Set(store.get("itb-votes",[]))},
+  withState(t){const voted=this.myVotes().has(t.id);const p=Object.values(t.progress);
+    return {...t, votes:t.votes+(voted?1:0), voted, overall:Math.round(p.reduce((a,b)=>a+b,0)/p.length)}},
+  ranked(){return TEAMS.map(t=>this.withState(t)).sort((a,b)=>b.score-a.score||b.votes-a.votes).map((t,i)=>({...t,rank:i+1}))},
+  team(id){return this.ranked().find(t=>t.id===id)},
+  async vote(id){const s=this.myVotes(); if(s.has(id)) return false; s.add(id); store.set("itb-votes",[...s]); return true},
+  async register(entry){const all=store.get("itb-registrations",[]); all.push({...entry,createdAt:new Date().toISOString()}); store.set("itb-registrations",all); return true}
+};
+
+/* ---------- Helpers ---------- */
+const $ = s=>document.querySelector(s);
+const esc = s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmt = n=>n.toLocaleString("en-NG");
+const role = id=>ROLES.find(r=>r.id===id);
+const ord = n=>n+(["th","st","nd","rd"][(n%100-20)%10]||["th","st","nd","rd"][n%100]||"th");
+const initials = n=>n.split(" ").map(w=>w[0]).join("").slice(0,2);
+function toast(msg){const t=$("#toast");t.textContent=msg;t.classList.add("show");clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove("show"),2200)}
+function teamTile(t,size="m",yellow=false){return `<div class="tile ${size} ${yellow?"yellow":""}" style="${yellow?"":"color:"+t.color}" aria-hidden="true">${yellow?`<span>${esc(t.initials)}</span>`:esc(t.initials)}</div>`}
+function movement(t){const d=t.prevRank-t.rank; if(d>0) return `<span class="move up">Up ${d} since yesterday</span>`; if(d<0) return `<span class="move">Down ${-d} since yesterday</span>`; return `<span class="move">No change</span>`}
+
+/* ---------- Views ---------- */
+function Home(){
+  const r=ROLES;
+  return `
+  <section class="hero">
+    <div class="wrap">
+      <div class="tilerow" aria-hidden="true">
+        <div class="tile m solo" style="animation-delay:.05s"><span class="brand-mark" style="width:40px;height:26px;color:#F4EEFA"></span></div>
+        <div class="stack">
+          ${r.slice(0,3).map((x,i)=>`<div class="tile" style="color:${x.color};animation-delay:${.1+i*.06}s">${x.mono}</div>`).join("")}
+          <div class="tile l yellow" style="animation-delay:.32s"><span>₦1M</span></div>
+          ${r.slice(3).map((x,i)=>`<div class="tile" style="color:${x.color};animation-delay:${.4+i*.06}s">${x.mono}</div>`).join("")}
+        </div>
+        <div class="tile m solo" style="color:#F4EEFA;animation-delay:.55s">26</div>
+      </div>
+
+      <svg class="sparkle hide-m" style="left:6%;top:50%;width:46px;height:46px;color:var(--pink);transform:rotate(14deg)"><use href="#cross"/></svg>
+      <svg class="sparkle hide-m" style="right:7%;top:26%;width:40px;height:40px;color:var(--sky-brand);transform:rotate(-12deg)"><use href="#tri"/></svg>
+      <svg class="sparkle hide-m" style="left:14%;top:80%;width:22px;height:22px;color:var(--purple)"><use href="#spark"/></svg>
+      <div class="cursor hide-m" style="left:5%;top:62%;color:var(--orange-ink)"><svg style="transform:scaleX(-1);margin-left:96px"><use href="#arrow-o"/></svg><span class="pill orange">Amaka</span></div>
+      <div class="cursor hide-m" style="right:9%;top:36%;color:var(--sky-ink)"><span class="pill sky">Tobi</span><svg><use href="#arrow-o"/></svg></div>
+      <div class="cursor hide-m" style="right:6%;top:78%;color:var(--purple)"><svg><use href="#arrow"/></svg><span class="pill purple">Your part</span></div>
+
+      <span class="kicker">INTROTECH BUILDATHON 2026</span>
+      <h1>Stand a chance to win ₦1,000,000.</h1>
+      <p class="lede">Five skills, one team, four weeks. Build a real product, put it in front of the public, and let the work speak.</p>
+      <div class="ctas">
+        <a class="btn" href="#/register">Join the Buildathon</a>
+        <a class="btn ghost" href="#/teams">Explore teams</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="event" aria-label="Event details">
+    <div class="wrap">
+      <div class="event-bar">
+        <div class="ev-date">21 Nov.<span>2026</span></div>
+        <div class="ev-venue"><b>ASUU Secretariat</b><span>Inside UNIZIK, Awka</span></div>
+        <div class="ev-time">9<span>AM</span></div>
+      </div>
+      <div class="ev-reg"><p>The Buildathon is part of IntroTech Conference, Awka 2026.</p><a href="https://www.intro-tech.org/reg" target="_blank" rel="noopener">Conference tickets: <span style="white-space:nowrap">intro-tech.org/reg</span></a></div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="wrap prize">
+      <div>
+        <p class="sub">The prize</p>
+        <p class="prize-amount">₦1,000,000</p>
+      </div>
+      <div class="winners">
+        <div class="winner"><div class="tile s yellow"><span>1</span></div><div><b>1 champion</b><span>The team with the strongest product and score.</span></div></div>
+        <div class="winner"><div class="tile s" style="color:var(--blue)">2</div><div><b>1 runner-up</b><span>Close behind, and recognised for it.</span></div></div>
+        <div class="winner"><div class="tile s" style="color:var(--pink)">3</div><div><b>3 outstanding participants</b><span>Each walks away with a laptop.</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="wrap">
+      <h2 class="h2">We're looking for builders.</h2>
+      <p class="sub">Everyone registers individually. Teams are formed with one person from each discipline.</p>
+      <div class="roles">
+        ${r.map(x=>`<div class="role"><div class="tile m" style="color:${x.color}">${x.mono}</div><div><h3>${x.name.replace(" / "," & ")}</h3><p>${x.blurb}</p></div></div>`).join("")}
+      </div>
+    </div>
+  </section>
+
+  <section class="part">
+    <div class="wrap">
+      <p>You don't need to know everything.</p>
+      <p>You just need to know your part.</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="wrap">
+      <h2 class="h2">Build. Test. Break. Amplify.</h2>
+      <p class="sub">Four weeks, one loop. Every team runs it together, and every part shows up on the leaderboard.</p>
+      <div class="loop">
+        <div><i>Week 1</i><h3>Build</h3><p>AI builders and engineers ship a first working version.</p></div>
+        <div><i>Week 2</i><h3>Test</h3><p>Real users try it. The team learns what to fix.</p></div>
+        <div><i>Week 3</i><h3>Break</h3><p>Security engineers attack it, then help harden it.</p></div>
+        <div><i>Week 4</i><h3>Amplify</h3><p>Creators and marketers take it public and win votes.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="closing">
+    <div class="wrap">
+      <h2 class="h2">Know your part. Bring your skill.</h2>
+      <div class="hero" style="padding:0;overflow:visible"><div class="ctas">
+        <a class="btn" href="#/register">Join the Buildathon</a>
+        <a class="btn ghost" href="#/leaderboard">See the leaderboard</a>
+      </div></div>
+    </div>
+  </section>
+  ${Footer()}`;
+}
+
+function Footer(){return `<footer><div class="wrap"><span>IntroTech Buildathon, part of IntroTech Conference, Awka 2026</span><span>Prototype data. Scores update daily during the Buildathon.</span></div></footer>`}
+
+function Leaderboard(){
+  const teams=api.ranked();
+  return `
+  <div class="wrap">
+    <header class="phead">
+      <h1>Leaderboard</h1>
+      <p class="sub">Judges' score decides the ranking. Public votes break ties and count toward the final.</p>
+    </header>
+    <div class="board-wrap sheet" style="margin-bottom:110px">
+      <div class="board" role="table" aria-label="Team rankings">
+        <div class="lb-head" role="row"><span role="columnheader">Position</span><span></span><span role="columnheader">Team and product</span><span role="columnheader">Score</span><span role="columnheader">Votes</span><span role="columnheader">Product progress</span></div>
+        ${teams.map(t=>`
+        <a class="lb-row ${t.rank<=3?"top":""} ${t.rank===1?"first":""}" role="row" href="#/team/${t.id}">
+          <span class="rank" role="cell">${t.rank}</span>
+          <span class="lb-tile" role="cell">${teamTile(t,"s",t.rank===1)}</span>
+          <span class="lb-team" role="cell"><b>${esc(t.name)}</b><span>${esc(t.product)}: ${esc(t.tagline)}</span>${movement(t)}</span>
+          <span class="num lb-score" role="cell">${t.score.toFixed(1)}<small>${fmt(t.votes)} votes</small></span>
+          <span class="num lb-votes" role="cell">${fmt(t.votes)}</span>
+          <span class="lb-prog" role="cell"><span class="barlabel"><span>Progress</span><span>${t.overall}%</span></span><span class="bar"><i style="width:${t.overall}%"></i></span></span>
+        </a>`).join("")}
+      </div>
+    </div>
+  </div>${Footer()}`;
+}
+
+let teamSort="rank";
+function Teams(){
+  let teams=api.ranked();
+  if(teamSort==="votes") teams=[...teams].sort((a,b)=>b.votes-a.votes);
+  if(teamSort==="progress") teams=[...teams].sort((a,b)=>b.overall-a.overall);
+  return `
+  <div class="wrap">
+    <header class="phead">
+      <h1>See what the teams are building.</h1>
+      <p class="sub">Open a team to follow its progress, try the demo, and vote. You get one vote per team.</p>
+      <div class="filters" role="group" aria-label="Sort teams">
+        ${[["rank","By position"],["votes","Most voted"],["progress","Most progress"]].map(([k,l])=>`<button class="chip" data-sort="${k}" aria-pressed="${teamSort===k}">${l}</button>`).join("")}
+      </div>
+    </header>
+    <div class="cards">
+      ${teams.map(t=>`
+      <article class="card">
+        <div class="card-top">${teamTile(t,"m",t.rank===1)}<div class="card-pos"><b>${ord(t.rank)}</b>position</div></div>
+        <h3>${esc(t.name)}</h3>
+        <div class="prod">${esc(t.product)}</div>
+        <p class="desc">${esc(t.tagline)}</p>
+        <div class="stats">
+          <div class="stat"><b>${t.score.toFixed(1)}</b><span>Score</span></div>
+          <div class="stat"><b data-votes="${t.id}">${fmt(t.votes)}</b><span>Votes</span></div>
+        </div>
+        <div class="barlabel"><span>Overall progress</span><span>${t.overall}%</span></div>
+        <div class="bar"><i style="width:${t.overall}%"></i></div>
+        <div class="members" aria-label="Team members">
+          ${t.members.map(([n,r])=>`<span class="av" title="${esc(n)}, ${role(r).short}" style="background:${role(r).color==="var(--r-security)"?"#1A0829":role(r).color}">${initials(n)}</span>`).join("")}
+        </div>
+        <div class="card-actions">
+          <a class="btn ghost sm" href="#/team/${t.id}">View team</a>
+          ${voteBtn(t,"sm")}
+        </div>
+      </article>`).join("")}
+    </div>
+  </div>${Footer()}`;
+}
+
+function voteBtn(t,size=""){
+  return t.voted
+    ? `<button class="btn voted ${size}" disabled aria-disabled="true">Voted</button>`
+    : `<button class="btn ${size}" data-vote="${t.id}">${size?"Vote":"Vote for this team"}</button>`;
+}
+
+function TeamDetail(id){
+  const t=api.team(id);
+  if(!t) return `<div class="wrap phead"><h1>Team not found</h1><p class="sub">This team may have been renamed. <a href="#/teams">Browse all teams</a>.</p></div>`;
+  const statusLabel={done:"Done",now:"In progress",next:"Up next"};
+  return `
+  <div class="wrap">
+    <a class="back" href="#/teams">All teams</a>
+    <div class="t-hero">
+      <div>
+        ${teamTile(t,"l",t.rank===1)}
+        <h1>${esc(t.name)}</h1>
+        <p class="prod">${esc(t.product)}</p>
+        <p class="sub">${esc(t.description)}</p>
+      </div>
+      <aside class="sheet votebox" aria-label="Vote">
+        <div class="big" id="votecount">${fmt(t.votes)}</div>
+        <div class="lbl">public votes</div>
+        <div id="votebtn">${voteBtn(t)}</div>
+        <p class="note" id="votenote">${t.voted?"Your vote is counted. Thank you.":"One tap. No sign-up needed."}</p>
+        <div class="vb-stats">
+          <div><b>${ord(t.rank)}</b><span>Leaderboard position</span></div>
+          <div><b>${t.score.toFixed(1)}</b><span>Overall score</span></div>
+        </div>
+      </aside>
+    </div>
+
+    <section class="sheet dept" aria-label="Progress by department">
+      <h2 style="font-size:26px;font-weight:600;letter-spacing:-.02em;margin:0 0 10px">Progress by department</h2>
+      ${ROLES.map(r=>{const v=t.progress[r.id];const c=r.color;return `
+      <div class="dept-row">
+        <div class="dept-name"><span class="tile s" style="color:${c};box-shadow:inset 0 0 0 1px var(--line)">${r.mono}</span>${r.short}</div>
+        <div class="track" role="progressbar" aria-label="${r.short}" aria-valuenow="${v}" aria-valuemin="0" aria-valuemax="100">
+          <i data-w="${v}" style="background:${c}"></i>
+          <span class="cur" data-w="${v}" style="left:0;color:${c}"><svg><use href="#arrow"/></svg><span class="pill">${v}%</span></span>
+        </div>
+      </div>`}).join("")}
+    </section>
+
+    <div class="grid2">
+      <section class="sheet panel">
+        <h2>Team</h2>
+        ${t.members.map(([n,r])=>`<div class="member"><span class="av" style="background:${role(r).color==="var(--r-security)"?"#1A0829":role(r).color}">${initials(n)}</span><div><b>${esc(n)}</b><span>${role(r).name}</span></div></div>`).join("")}
+        <div class="demo"><div><b style="display:block">Product demo</b><a href="${t.demo}" target="_blank" rel="noopener">${t.demo.replace("https://","")}</a></div><a class="btn ghost sm" href="${t.demo}" target="_blank" rel="noopener">Open demo</a></div>
+      </section>
+      <section class="sheet panel">
+        <h2>Milestones</h2>
+        <ol class="miles">
+          ${t.milestones.map(([n,w,s])=>`<li class="${s}"><b>${n}</b><span>${w}, ${statusLabel[s].toLowerCase()}</span></li>`).join("")}
+        </ol>
+      </section>
+    </div>
+
+    <section class="sheet log">
+      <h2 style="font-size:26px;font-weight:600;letter-spacing:-.02em;margin:0 0 18px">Progress log</h2>
+      ${t.updates.map(([d,h,p])=>`<div class="log-item"><time>${d}</time><div><b>${esc(h)}</b><p>${esc(p)}</p></div></div>`).join("")}
+    </section>
+  </div>${Footer()}`;
+}
+
+function Register(){
+  return `
+  <div class="wrap reg">
+    <div class="reg-side">
+      <h1>Know your part. Bring your skill.</h1>
+      <p class="sub">Register on your own. We'll put you in a team with one person from each of the other four disciplines.</p>
+    </div>
+    <div class="sheet" id="regbox">
+      <form class="form" id="regform" novalidate>
+        <fieldset>
+          <legend>Your part</legend>
+          <div class="rolepick">
+            ${ROLES.map(r=>`<div><input type="radio" name="role" id="r-${r.id}" value="${r.id}"><label for="r-${r.id}"><span class="tile s" style="color:${r.color}">${r.mono}</span>${r.name}</label></div>`).join("")}
+          </div>
+          <div class="errmsg" id="err-role" hidden>Choose the role you'll play on your team.</div>
+        </fieldset>
+        <div class="field"><label class="flabel" for="f-name">Full name</label><input id="f-name" name="name" autocomplete="name" required></div>
+        <div class="row2">
+          <div class="field"><label class="flabel" for="f-email">Email</label><input id="f-email" name="email" type="email" autocomplete="email" required></div>
+          <div class="field"><label class="flabel" for="f-wa">WhatsApp number</label><input id="f-wa" name="whatsapp" type="tel" autocomplete="tel" placeholder="+234" required></div>
+        </div>
+        <div class="field"><label class="flabel" for="f-link">Portfolio or project link</label><input id="f-link" name="portfolio" type="url" placeholder="https://"><div class="hint">GitHub, Behance, a live product, or a post you're proud of.</div></div>
+        <div class="field"><label class="flabel" for="f-exp">Experience and skills</label><textarea id="f-exp" name="experience" required placeholder="Tools you use, what you've built, how long you've done it."></textarea></div>
+        <div class="field"><label class="flabel" for="f-contrib">What you can contribute</label><textarea id="f-contrib" name="contribution" required placeholder="What will your team be able to do because you're on it?"></textarea></div>
+        <button class="btn" type="submit" style="width:100%">Join the Buildathon</button>
+      </form>
+    </div>
+  </div>${Footer()}`;
+}
+
+/* ---------- Router ---------- */
+function render(){
+  const h=location.hash.replace(/^#\/?/,"");
+  const [page,arg]=h.split("/");
+  const key=page||"home";
+  const views={home:Home,leaderboard:Leaderboard,teams:Teams,team:()=>TeamDetail(arg),register:Register};
+  $("#app").innerHTML=(views[key]||Home)();
+  const navKey=key==="team"?"teams":key;
+  document.querySelectorAll("[data-nav]").forEach(a=>{
+    if(a.dataset.nav===navKey) a.setAttribute("aria-current","page"); else a.removeAttribute("aria-current");
+  });
+  const titles={home:"IntroTech Buildathon 2026",leaderboard:"Leaderboard",teams:"Teams",register:"Register",team:(api.team(arg)||{}).name||"Team"};
+  document.title=(key==="home"?"":titles[key]+" | ")+"IntroTech Buildathon 2026";
+  window.scrollTo(0,0);
+  if(key==="team") requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    document.querySelectorAll(".track i").forEach(el=>el.style.width=el.dataset.w+"%");
+    document.querySelectorAll(".track .cur").forEach(el=>el.style.left=el.dataset.w+"%");
+  }));
+}
+window.addEventListener("hashchange",render);
+
+/* ---------- Interactions ---------- */
+document.addEventListener("click",async e=>{
+  const s=e.target.closest("[data-sort]"); if(s){teamSort=s.dataset.sort; render(); return}
+  const v=e.target.closest("[data-vote]");
+  if(v){
+    e.preventDefault();
+    const id=v.dataset.vote; const ok=await api.vote(id); if(!ok) return;
+    const t=api.team(id);
+    if($("#votebtn")){
+      $("#votebtn").innerHTML=voteBtn(t);
+      const c=$("#votecount"); c.textContent=fmt(t.votes); c.classList.remove("bump"); void c.offsetWidth; c.classList.add("bump");
+      $("#votenote").textContent="Your vote is counted. Thank you.";
+    } else {
+      v.outerHTML=voteBtn(t,"sm");
+      const n=document.querySelector(`[data-votes="${id}"]`); if(n) n.textContent=fmt(t.votes);
+    }
+    toast(`Voted for ${t.name}`);
+  }
+});
+
+document.addEventListener("submit",async e=>{
+  if(e.target.id!=="regform") return;
+  e.preventDefault();
+  const f=e.target; let first=null;
+  f.querySelectorAll(".field").forEach(x=>{x.classList.remove("err");x.querySelector(".errmsg")?.remove()});
+  const fail=(el,msg)=>{const fld=el.closest(".field");fld.classList.add("err");fld.insertAdjacentHTML("beforeend",`<div class="errmsg">${msg}</div>`);first=first||el};
+  const roleSel=f.querySelector("input[name=role]:checked");
+  $("#err-role").hidden=!!roleSel; if(!roleSel) first=f.querySelector("input[name=role]");
+  if(!f.name.value.trim()) fail(f.name,"Enter your full name.");
+  if(!/^\S+@\S+\.\S+$/.test(f.email.value.trim())) fail(f.email,"Enter an email address like name@example.com.");
+  if(f.whatsapp.value.replace(/\D/g,"").length<10) fail(f.whatsapp,"Enter a WhatsApp number with at least 10 digits.");
+  if(f.portfolio.value.trim() && !/^https?:\/\/\S+\.\S+/.test(f.portfolio.value.trim())) fail(f.portfolio,"Start the link with https://");
+  if(!f.experience.value.trim()) fail(f.experience,"Tell us what you've done so far.");
+  if(!f.contribution.value.trim()) fail(f.contribution,"Tell us what you'll bring to your team.");
+  if(first){first.focus();return}
+  const entry={role:roleSel.value,name:f.name.value.trim(),email:f.email.value.trim(),whatsapp:f.whatsapp.value.trim(),portfolio:f.portfolio.value.trim(),experience:f.experience.value.trim(),contribution:f.contribution.value.trim()};
+  await api.register(entry);
+  const r=role(entry.role);
+  $("#regbox").innerHTML=`<div class="done"><div class="tile l" style="color:${r.color}">${r.mono}</div><h2>You're registered, ${esc(entry.name.split(" ")[0])}.</h2><p class="sub" style="margin:0 auto 28px">You've joined as ${r.name}. We'll message you on WhatsApp when your team is formed.</p><a class="btn ghost" href="#/teams">Explore teams</a></div>`;
+  window.scrollTo({top:0,behavior:"smooth"});
+});
+
+render();
+</script>
+</body>
+</html>

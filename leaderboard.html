@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- @include head -->
+    <title>Leaderboard · IntroTech Buildathon 2026</title>
+    <link rel="stylesheet" href="/src/styles/pages/leaderboard.css">
+    <meta name="description" content="Live rankings for the IntroTech Buildathon 2026. Judges' score decides the ranking; public votes break ties.">
+  </head>
+  <body>
+    <!-- @include header -->
+
+    <main id="main">
+      <header class="page-hero">
+        <div class="backdrop-grid" aria-hidden="true"></div>
+        <div class="glow-orb glow-orb--brand page-hero__orb" aria-hidden="true"></div>
+        <div class="container">
+          <span class="eyebrow-text" data-reveal><span class="live-dot" aria-hidden="true"></span>Updated daily</span>
+          <h1 class="h1 text-chrome" data-reveal style="--delay:60ms">Leaderboard</h1>
+          <p class="lede" data-reveal style="--delay:120ms">Judges' score decides the ranking. Public votes break ties and count toward the final.</p>
+        </div>
+      </header>
+
+      <section class="section board-section" aria-label="Rankings">
+        <div class="container">
+          <div class="podium" data-podium data-spotlight-group></div>
+
+          <div class="card board" data-reveal>
+            <table class="board__table">
+              <caption class="visually-hidden">All teams ranked by judges' score</caption>
+              <thead>
+                <tr>
+                  <th scope="col" class="board__col-rank">Rank</th>
+                  <th scope="col">Team and product</th>
+                  <th scope="col" class="board__col-num">Score</th>
+                  <th scope="col" class="board__col-num board__col-votes">Votes</th>
+                  <th scope="col" class="board__col-progress">Product progress</th>
+                  <th scope="col" class="board__col-go"><span class="visually-hidden">Open team</span></th>
+                </tr>
+              </thead>
+              <tbody data-board></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- @include footer -->
+    <script type="module" src="/src/pages/leaderboard.ts"></script>
+  </body>
+</html>

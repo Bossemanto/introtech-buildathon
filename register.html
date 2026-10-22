@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- @include head -->
+    <title>Register · IntroTech Buildathon 2026</title>
+    <link rel="stylesheet" href="/src/styles/pages/register.css">
+    <meta name="description" content="Register for the IntroTech Buildathon 2026. Pick your part and we'll put you in a five-person team.">
+  </head>
+  <body>
+    <!-- @include header -->
+
+    <main id="main">
+      <div class="register">
+        <div class="backdrop-grid" aria-hidden="true"></div>
+        <div class="glow-orb glow-orb--brand register__orb" aria-hidden="true"></div>
+
+        <div class="container register__grid">
+          <div class="register__side">
+            <span class="eyebrow-text" data-reveal>Registration</span>
+            <h1 class="h1 text-chrome" data-reveal style="--delay:60ms">Know your part. Bring your skill.</h1>
+            <p class="lede" data-reveal style="--delay:120ms">Register on your own. We'll put you in a team with one person from each of the other four disciplines.</p>
+
+            <ol class="steps" role="list" data-reveal style="--delay:180ms">
+              <li><span class="steps__n">1</span><div><b>Pick your part</b><span>Choose the discipline you'll own on your team.</span></div></li>
+              <li><span class="steps__n">2</span><div><b>We form the teams</b><span>One person from each discipline, matched by the organisers.</span></div></li>
+              <li><span class="steps__n">3</span><div><b>Build for four weeks</b><span>Ship, test, harden and launch, then demo in Awka on 21 Nov.</span></div></li>
+            </ol>
+          </div>
+
+          <div class="card register__card beam" data-register data-reveal style="--delay:100ms">
+            <form class="register__form" novalidate data-register-form>
+              <fieldset class="fieldset">
+                <legend>Your part</legend>
+                <div class="role-pick" data-role-pick></div>
+                <p class="error" data-role-error hidden>Choose the role you'll play on your team.</p>
+              </fieldset>
+
+              <div class="field">
+                <label for="f-name">Full name</label>
+                <input class="input" id="f-name" name="name" autocomplete="name" required>
+              </div>
+              <div class="field-row">
+                <div class="field">
+                  <label for="f-email">Email</label>
+                  <input class="input" id="f-email" name="email" type="email" autocomplete="email" required>
+                </div>
+                <div class="field">
+                  <label for="f-wa">WhatsApp number</label>
+                  <input class="input" id="f-wa" name="whatsapp" type="tel" autocomplete="tel" placeholder="+234" required>
+                </div>
+              </div>
+              <div class="field">
+                <label for="f-link">Portfolio or project link <span class="optional">(optional)</span></label>
+                <input class="input" id="f-link" name="portfolio" type="url" placeholder="https://" aria-describedby="f-link-hint">
+                <p class="hint" id="f-link-hint">GitHub, Behance, a live product, or a post you're proud of.</p>
+              </div>
+              <div class="field">
+                <label for="f-exp">Experience and skills</label>
+                <textarea class="input" id="f-exp" name="experience" required placeholder="Tools you use, what you've built, how long you've done it."></textarea>
+              </div>
+              <div class="field">
+                <label for="f-contrib">What you can contribute</label>
+                <textarea class="input" id="f-contrib" name="contribution" required placeholder="What will your team be able to do because you're on it?"></textarea>
+              </div>
+
+              <button class="btn btn--primary btn--lg btn--block register__submit" type="submit">
+                Join the Buildathon<svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- @include footer -->
+    <script type="module" src="/src/pages/register.ts"></script>
+  </body>
+</html>

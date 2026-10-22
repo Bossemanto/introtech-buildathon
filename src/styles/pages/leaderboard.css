@@ -1,0 +1,212 @@
+/* ==========================================================================
+   Leaderboard
+   ========================================================================== */
+.board-section {
+  padding-top: 0;
+}
+
+/* --- Podium -------------------------------------------------------------- */
+.podium {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.podium__card {
+  display: grid;
+  gap: 18px;
+  padding: 24px;
+  transition: transform var(--dur) var(--ease-out);
+}
+.podium__card:hover {
+  transform: translateY(-2px);
+}
+.podium__card--1 {
+  background:
+    radial-gradient(90% 70% at 50% 0%, rgb(246 196 82 / 0.16), transparent 60%),
+    linear-gradient(180deg, var(--surface-2), var(--surface));
+  box-shadow: inset 0 0 0 1px rgb(246 196 82 / 0.3), var(--shadow-3), 0 0 60px -20px rgb(246 196 82 / 0.5);
+}
+
+.podium__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.podium__place {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  line-height: 1;
+  background: var(--grad-chrome);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.podium__card--1 .podium__place {
+  background-image: var(--grad-gold);
+}
+
+.podium__name {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+.podium__product {
+  color: var(--c);
+  font-weight: 600;
+  font-size: var(--fs-sm);
+}
+.podium__stats {
+  display: flex;
+  gap: 20px;
+  font-size: var(--fs-sm);
+  color: var(--text-3);
+}
+.podium__stats b {
+  color: var(--text);
+  font-size: var(--fs-lg);
+  font-weight: 700;
+}
+
+@media (max-width: 860px) {
+  .podium {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* --- Table --------------------------------------------------------------- */
+.board {
+  overflow: hidden;
+}
+
+.board__table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.board__table th {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+  font-size: var(--fs-xs);
+  font-weight: 500;
+  text-align: left;
+  color: var(--text-3);
+  background: rgb(255 255 255 / 0.015);
+}
+
+.board__table td {
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+.board__row:last-child td {
+  border-bottom: 0;
+}
+
+.board__row {
+  position: relative;
+  transition: background-color var(--dur-fast);
+}
+.board__row:hover {
+  background: rgb(255 255 255 / 0.025);
+}
+.board__row--first {
+  background: linear-gradient(90deg, rgb(246 196 82 / 0.07), transparent 60%);
+}
+
+.board__col-rank {
+  width: 80px;
+}
+.board__col-num {
+  width: 100px;
+  text-align: right !important;
+}
+.board__col-progress {
+  width: 220px;
+}
+.board__table .board__col-go {
+  width: 48px;
+  padding-inline: 0 20px;
+  color: var(--text-3);
+  border-bottom: 1px solid var(--border);
+  background: inherit;
+}
+.board__col-go .icon {
+  width: 16px;
+  height: 16px;
+  transition: transform var(--dur) var(--ease-out), color var(--dur);
+}
+.board__row:hover .board__col-go .icon {
+  color: var(--text);
+  transform: translateX(3px);
+}
+
+.board__team {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* Stretched link: whole row navigates to the team */
+.board__name {
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.board__name::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+.board__name:focus-visible {
+  outline: 0;
+}
+.board__row:has(.board__name:focus-visible) {
+  outline: 2px solid var(--brand-hi);
+  outline-offset: -2px;
+}
+
+.board__product {
+  display: block;
+  max-width: 52ch;
+  margin: 2px 0 4px;
+  font-size: var(--fs-sm);
+  color: var(--text-3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.board__score {
+  font-family: var(--font-display);
+  font-size: var(--fs-xl);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+@media (max-width: 860px) {
+  .board__col-votes,
+  .board__col-progress,
+  .board__col-go {
+    display: none;
+  }
+  .board__table td,
+  .board__table th {
+    padding-inline: 14px;
+  }
+  .board__col-rank {
+    width: 56px;
+  }
+  .board__product {
+    white-space: normal;
+  }
+}
+@media (max-width: 480px) {
+  .board__team .mark {
+    display: none;
+  }
+}

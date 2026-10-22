@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- @include head -->
+    <title>Teams · IntroTech Buildathon 2026</title>
+    <link rel="stylesheet" href="/src/styles/pages/teams.css">
+    <meta name="description" content="See what every IntroTech Buildathon team is building, follow their progress, try the demos and vote.">
+  </head>
+  <body>
+    <!-- @include header -->
+
+    <main id="main">
+      <header class="page-hero">
+        <div class="backdrop-grid" aria-hidden="true"></div>
+        <div class="glow-orb glow-orb--brand page-hero__orb" aria-hidden="true"></div>
+        <div class="container">
+          <span class="eyebrow-text" data-reveal><span class="live-dot" aria-hidden="true"></span>Public voting is open</span>
+          <h1 class="h1 text-chrome" data-reveal style="--delay:60ms">See what the teams are building.</h1>
+          <p class="lede" data-reveal style="--delay:120ms">Open a team to follow its progress, try the demo, and vote. You get one vote per team.</p>
+        </div>
+      </header>
+
+      <section class="section teams-section" aria-label="All teams">
+        <div class="container">
+          <div class="toolbar">
+            <p class="toolbar__count muted" data-team-count aria-live="polite"></p>
+            <div class="segmented" role="group" aria-label="Sort teams" data-sort-control>
+              <button type="button" data-sort="rank" aria-pressed="true">By position</button>
+              <button type="button" data-sort="votes" aria-pressed="false">Most voted</button>
+              <button type="button" data-sort="progress" aria-pressed="false">Most progress</button>
+            </div>
+          </div>
+          <div class="team-grid" data-team-grid data-spotlight-group></div>
+        </div>
+      </section>
+    </main>
+
+    <!-- @include footer -->
+    <script type="module" src="/src/pages/teams.ts"></script>
+  </body>
+</html>

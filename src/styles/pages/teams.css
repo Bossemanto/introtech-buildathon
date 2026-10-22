@@ -1,0 +1,140 @@
+/* ==========================================================================
+   Teams
+   ========================================================================== */
+.teams-section {
+  padding-top: 0;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+.toolbar__count {
+  font-size: var(--fs-sm);
+}
+
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.team-card {
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+}
+
+.team-card__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 22px;
+}
+
+.team-card__name {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+/* Whole card is clickable via the title link; buttons sit above it */
+.team-card__name a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+}
+.team-card__name a:focus-visible {
+  outline: 0;
+}
+.team-card__name a:focus-visible::after {
+  outline: 2px solid var(--brand-hi);
+  outline-offset: 2px;
+}
+
+.team-card__product {
+  margin-top: 2px;
+  font-weight: 600;
+  font-size: var(--fs-sm);
+  color: var(--c);
+}
+
+.team-card__tagline {
+  margin-top: 10px;
+  color: var(--text-2);
+  font-size: var(--fs-sm);
+  flex: 1;
+}
+
+.team-card__stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin: 22px 0 14px;
+}
+.team-card__stats dt {
+  font-size: var(--fs-xs);
+  color: var(--text-3);
+}
+.team-card__stats dd {
+  font-size: var(--fs-xl);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.team-card__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+}
+.team-card__actions {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  gap: 8px;
+}
+
+@media (max-width: 1060px) {
+  .team-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 680px) {
+  .team-grid {
+    grid-template-columns: 1fr;
+  }
+}
+@media (min-width: 681px) and (max-width: 800px) {
+  .team-card__foot {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .team-card__actions {
+    width: 100%;
+  }
+  .team-card__actions .btn {
+    flex: 1;
+  }
+}
+@media (max-width: 400px) {
+  .team-card__foot {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .team-card__actions .btn {
+    flex: 1;
+  }
+}

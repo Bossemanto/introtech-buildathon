@@ -1,0 +1,204 @@
+/* ==========================================================================
+   Effects: shimmer, glow, spotlight, beams, backdrops, reveal.
+   Purely decorative. Every animation is disabled under reduced motion.
+   ========================================================================== */
+
+@property --angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes spin-angle {
+  to {
+    --angle: 360deg;
+  }
+}
+
+@keyframes text-shine {
+  to {
+    background-position: 200% center;
+  }
+}
+
+@keyframes float {
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes pulse-glow {
+  50% {
+    opacity: 0.55;
+    transform: scale(0.94);
+  }
+}
+
+/* --- Text --------------------------------------------------------------- */
+.text-chrome {
+  background: var(--grad-chrome);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Brand gradient with a highlight that sweeps across */
+.text-shimmer {
+  background: linear-gradient(
+    100deg,
+    var(--brand-hi) 0%,
+    var(--pink) 22%,
+    #ffd6e6 34%,
+    var(--pink) 46%,
+    var(--brand-hi) 70%,
+    #c9a6ff 85%,
+    var(--brand-hi) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: text-shine 7s linear infinite;
+}
+
+/* --- Rotating beam border (badges, featured cards) ---------------------- */
+.beam {
+  position: relative;
+  isolation: isolate;
+}
+.beam::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  padding: 1px;
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--angle),
+    transparent 0 62%,
+    var(--beam-a, var(--brand-hi)) 76%,
+    var(--beam-b, var(--pink)) 86%,
+    transparent 96%
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: spin-angle var(--beam-speed, 5s) linear infinite;
+  pointer-events: none;
+}
+
+/* --- Spotlight (cursor-following glow, driven by effects.ts) ------------- */
+.spotlight {
+  --spot: var(--c, var(--brand-hi));
+  isolation: isolate;
+}
+.spotlight::before,
+.spotlight::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 400ms var(--ease-out);
+  pointer-events: none;
+}
+/* Border light: visible across the whole group while hovering it */
+.spotlight::before {
+  z-index: 2;
+  padding: 1px;
+  background: radial-gradient(
+    320px circle at var(--mx, -500px) var(--my, -500px),
+    color-mix(in srgb, var(--spot) 85%, transparent),
+    transparent 60%
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+/* Surface wash: only on the hovered card */
+.spotlight::after {
+  z-index: -1;
+  background: radial-gradient(
+    480px circle at var(--mx, -500px) var(--my, -500px),
+    color-mix(in srgb, var(--spot) 12%, transparent),
+    transparent 55%
+  );
+}
+[data-spotlight-group]:hover .spotlight::before,
+.spotlight:hover::after,
+.spotlight:focus-within::after {
+  opacity: 1;
+}
+
+/* --- Backdrops ---------------------------------------------------------- */
+/* Fine grid that fades out from the top centre (Vercel/Cloudflare style) */
+.backdrop-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, rgb(255 255 255 / 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(255 255 255 / 0.045) 1px, transparent 1px);
+  background-size: 56px 56px;
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 30%, transparent 75%);
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 30%, transparent 75%);
+  pointer-events: none;
+}
+
+.glow-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  opacity: 0.8;
+}
+.glow-orb--brand {
+  background: radial-gradient(circle, rgb(139 63 217 / 0.7), transparent 70%);
+}
+.glow-orb--pink {
+  background: radial-gradient(circle, rgb(255 77 143 / 0.45), transparent 70%);
+}
+.glow-orb--blue {
+  background: radial-gradient(circle, rgb(76 157 255 / 0.35), transparent 70%);
+}
+
+/* Horizon line glow, used under heroes */
+.horizon {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: min(1100px, 100%);
+  height: 1px;
+  transform: translateX(-50%);
+  background: linear-gradient(90deg, transparent, rgb(169 112 255 / 0.8), rgb(255 77 143 / 0.8), transparent);
+  box-shadow: 0 0 24px 2px rgb(169 112 255 / 0.5);
+  pointer-events: none;
+}
+
+/* --- Scroll reveal ------------------------------------------------------ */
+.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 800ms var(--ease-out),
+    transform 800ms var(--ease-out);
+  transition-delay: var(--delay, 0ms);
+}
+.js [data-reveal].is-revealed {
+  opacity: 1;
+  transform: none;
+}
+
+/* --- Reduced motion ----------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .js [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+}
