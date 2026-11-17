@@ -1,10 +1,10 @@
 import { castVote, getTeam } from "../lib/api";
 import { html, type SafeHtml } from "../lib/html";
-import type { RankedTeam } from "../lib/types";
+import type { VotableTeam } from "../lib/types";
 import { icon } from "./icon";
 import { toast } from "./toast";
 
-export function voteButton(team: RankedTeam, opts: { size?: "sm" | "lg"; label?: string } = {}): SafeHtml {
+export function voteButton(team: VotableTeam, opts: { size?: "sm" | "lg"; label?: string } = {}): SafeHtml {
   const size = opts.size ? `btn--${opts.size}` : "";
   return team.voted
     ? html`<button class="btn btn--voted ${size}" type="button" disabled>${icon("check")}Voted</button>`
@@ -17,7 +17,7 @@ export function voteButton(team: RankedTeam, opts: { size?: "sm" | "lg"; label?:
  */
 export function bindVoting(
   root: ParentNode,
-  onVoted: (team: RankedTeam, button: HTMLButtonElement) => void,
+  onVoted: (team: VotableTeam, button: HTMLButtonElement) => void,
   opts: Parameters<typeof voteButton>[1] = {},
 ): void {
   root.addEventListener("click", async (event) => {

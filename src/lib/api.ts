@@ -1,6 +1,6 @@
 import { TEAMS } from "../data/teams";
 import { storage } from "./storage";
-import type { RankedTeam, Registration, Team } from "./types";
+import type { Registration, Team, VotableTeam } from "./types";
 
 /**
  * Data access layer. Every consumer goes through these functions, so
@@ -14,23 +14,19 @@ function myVotes(): Set<string> {
   return new Set(storage.get<string[]>(VOTES_KEY, []));
 }
 
-function withState(team: Team, votes: Set<string>): Omit<RankedTeam, "rank"> {
+function withState(team: Team, votes: Set<string>): VotableTeam {
   const voted = votes.has(team.id);
-  const values = Object.values(team.progress);
-  const overall = Math.round(values.reduce((a, b) => a + b, 0) / values.length);
-  return { ...team, votes: team.votes + (voted ? 1 : 0), voted, overall };
+  return { ...team, votes: voted ? 1 : 0, voted };
 }
 
-/** Teams ordered by judges' score; public votes break ties. */
-export function getRankedTeams(): RankedTeam[] {
+/** Teams ordered alphabetically; votes are local to this browser. */
+export function getTeams(): VotableTeam[] {
   const votes = myVotes();
-  return TEAMS.map((t) => withState(t, votes))
-    .sort((a, b) => b.score - a.score || b.votes - a.votes)
-    .map((t, i) => ({ ...t, rank: i + 1 }));
+  return TEAMS.map((t) => withState(t, votes)).sort((a, b) => a.name.localeCompare(b.name));
 }
 
-export function getTeam(id: string): RankedTeam | undefined {
-  return getRankedTeams().find((t) => t.id === id);
+export function getTeam(id: string): VotableTeam | undefined {
+  return getTeams().find((t) => t.id === id);
 }
 
 /** Resolves to false if this visitor has already voted for the team. */

@@ -36,25 +36,6 @@ export interface Role {
   blurb: string;
 }
 
-export type MilestoneStatus = "done" | "now" | "next";
-
-export interface Member {
-  name: string;
-  role: RoleId;
-}
-
-export interface Milestone {
-  title: string;
-  when: string;
-  status: MilestoneStatus;
-}
-
-export interface Update {
-  date: string;
-  title: string;
-  body: string;
-}
-
 export interface Team {
   id: string;
   name: string;
@@ -63,24 +44,20 @@ export interface Team {
   product: string;
   tagline: string;
   description: string;
-  /** Judges' score out of 100. Decides ranking. */
-  score: number;
-  /** Public votes before this visitor's own vote. */
-  votes: number;
-  prevRank: number;
+  problem: string;
+  features: string[];
+  difference: string;
+  functional: string[];
+  technologies: string[];
+  lead: string;
   demo: string;
-  progress: Record<RoleId, number>;
-  members: Member[];
-  milestones: Milestone[];
-  updates: Update[];
+  repository: string;
 }
 
-/** A team enriched with derived, visitor-specific state. */
-export interface RankedTeam extends Team {
-  rank: number;
+/** A team enriched with votes stored in this visitor's browser. */
+export interface VotableTeam extends Team {
+  votes: number;
   voted: boolean;
-  /** Mean progress across all departments, 0–100. */
-  overall: number;
 }
 
 export interface Registration {

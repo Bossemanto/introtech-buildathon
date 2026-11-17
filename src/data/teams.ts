@@ -1,190 +1,76 @@
-import type { Milestone, MilestoneStatus, Team } from "../lib/types";
+import type { Team } from "../lib/types";
 
-/** Shorthand for the standard four-week milestone track. */
-function track(...statuses: [MilestoneStatus, MilestoneStatus, MilestoneStatus, MilestoneStatus]): Milestone[] {
-  const steps = ["Team formed", "Working prototype", "Security review", "Public demo day"];
-  return steps.map((title, i) => ({ title, when: `Week ${i + 1}`, status: statuses[i]! }));
-}
-
-/**
- * Prototype data, shaped like rows from Airtable / Supabase.
- * Swap `src/lib/api.ts` to fetch from a backend instead.
- */
 export const TEAMS: readonly Team[] = [
   {
-    id: "kora-labs",
-    name: "Kora Labs",
-    initials: "KL",
+    id: "node-kraft",
+    name: "NODE KRAFT",
+    initials: "NK",
     color: "#A970FF",
-    product: "Ledgerline",
-    tagline: "Bookkeeping for market traders, kept through WhatsApp voice notes.",
+    product: "SafeSign",
+    tagline: "Verify crypto payments on-chain instead of trusting screenshots.",
     description:
-      "Traders send a voice note after each sale. Ledgerline transcribes it in English, Pidgin or Yoruba, keeps the books, and sends a simple daily summary.",
-    score: 91.4,
-    votes: 2148,
-    prevRank: 2,
-    demo: "https://ledgerline.demo.introtech.ng",
-    progress: { builder: 82, engineer: 76, security: 68, creator: 91, marketing: 73 },
-    members: [
-      { name: "Tolu Adebayo", role: "builder" },
-      { name: "Chidi Okafor", role: "engineer" },
-      { name: "Ifeoma Nwosu", role: "security" },
-      { name: "Bisola Ade", role: "creator" },
-      { name: "Musa Danjuma", role: "marketing" },
+      "SafeSign helps people verify crypto payments before trusting them. Paste a transaction hash to confirm on the blockchain whether it exists and succeeded, who sent and received it, and the amount. It can also compare a payment with what you expected in plain English or any of at least eight available languages.",
+    problem:
+      "Crypto payments can be difficult to verify, and scammers exploit that uncertainty. SafeSign lets anyone check whether a payment happened, succeeded, reached the right wallet, and used the right amount and token.",
+    features: [
+      "Transaction verification: check a transaction's real status, sender, recipient, amount, and confirmations directly on-chain.",
+      "Payment matching: compare a transaction with the payment you expected to receive.",
+      "Token authenticity: flag tokens that do not use a trusted contract.",
     ],
-    milestones: track("done", "done", "now", "next"),
-    updates: [
-      {
-        date: "Oct 4",
-        title: "Voice notes in Yoruba now transcribe correctly",
-        body: "Accuracy went from 71% to 88% after retraining on 400 market recordings.",
-      },
-      {
-        date: "Oct 2",
-        title: "First 40 traders onboarded at Balogun market",
-        body: "Musa ran a stand at the market entrance for two mornings.",
-      },
-      { date: "Sep 29", title: "Prototype live", body: "Daily summaries now arrive at 8pm on WhatsApp." },
-    ],
+    difference:
+      "Unlike block explorers that require users to interpret raw data or wallet tools that focus on the moment of signing, SafeSign checks a payment after it is sent and compares it with expectations in plain language—without connecting a wallet.",
+    functional: ["Reporting & Analytics"],
+    technologies: ["Lovable AI", "Claude", "ChatGPT", "Alchemy API", "GoPlus API", "Virus API"],
+    lead: "Okonkwo Chisom Diamond",
+    demo: "https://sign-before-you-shield.vercel.app/",
+    repository: "https://github.com/chisomdoc157-wq/sign-before-you-shield",
   },
   {
-    id: "third-mainland",
-    name: "Third Mainland",
-    initials: "TM",
+    id: "el-nino",
+    name: "El Nino Team 8 (Buildathon Group 8)",
+    initials: "EN",
     color: "#4C9DFF",
-    product: "Tutor Thirteen",
-    tagline: "WAEC revision tutor that explains in Pidgin or English.",
+    product: "El Nino",
+    tagline: "Smart farming with live farm monitoring and AI-powered guidance.",
     description:
-      "Students photograph a past question. Tutor Thirteen walks through the answer step by step and sets a short follow-up quiz.",
-    score: 89.7,
-    votes: 2610,
-    prevRank: 1,
-    demo: "https://tutor13.demo.introtech.ng",
-    progress: { builder: 88, engineer: 81, security: 62, creator: 84, marketing: 90 },
-    members: [
-      { name: "Amaka Eze", role: "builder" },
-      { name: "Kunle Bello", role: "engineer" },
-      { name: "Zainab Yusuf", role: "security" },
-      { name: "Efe Omoregie", role: "creator" },
-      { name: "Seun Akin", role: "marketing" },
+      "El Nino combines IoT sensors, hardware, and software to monitor farm conditions in real time, visualize crop environments through a digital twin, and provide AI-driven insights to help farmers make informed decisions.",
+    problem:
+      "Smallholder farmers face limited market information, late detection of crop disease, unpredictable weather and flooding, scarce agricultural extension services, and dry-season fires that can destroy crops and farmland.",
+    features: [
+      "Proactive disaster prevention: IoT sensors detect rain, flash flooding, and dry-season wildfires and provide mitigation steps.",
+      "Crop disease diagnosis: analyze uploaded crop images and get potential diagnoses, treatments, and prevention guidance.",
+      "AI agricultural assistant: get guidance on soil management, fertilizer, pest control, and crop care.",
     ],
-    milestones: track("done", "done", "now", "next"),
-    updates: [
-      {
-        date: "Oct 3",
-        title: "1,200 students tried it this week",
-        body: "Mostly through three school WhatsApp groups in Surulere.",
-      },
-      { date: "Sep 30", title: "Maths and physics supported", body: "Chemistry diagrams are next." },
-    ],
+    difference:
+      "El Nino combines IoT-powered farm monitoring, an interactive digital twin, AI crop-disease diagnosis, and an agricultural assistant in one platform, connecting physical farm conditions with software guidance.",
+    functional: ["Core Dashboard", "Database", "Reporting & Analytics"],
+    technologies: ["Gemini 3.1 Flash Lite", "@google/genai SDK"],
+    lead: "Prince Chidera",
+    demo: "https://elnino-three.vercel.app",
+    repository: "https://github.com/prince24-web/El-nino",
   },
   {
-    id: "blackbox",
-    name: "Blackbox",
-    initials: "Bx",
-    color: "#F6C452",
-    product: "Shieldwall",
-    tagline: "Catches phishing and fake transfer alerts in small business inboxes.",
-    description:
-      "Shieldwall checks emails and SMS alerts against known scam patterns and flags fake bank credit alerts before staff release goods.",
-    score: 87.2,
-    votes: 1534,
-    prevRank: 3,
-    demo: "https://shieldwall.demo.introtech.ng",
-    progress: { builder: 70, engineer: 85, security: 96, creator: 66, marketing: 61 },
-    members: [
-      { name: "Daniel Etim", role: "security" },
-      { name: "Halima Sani", role: "engineer" },
-      { name: "Obi Uche", role: "builder" },
-      { name: "Rita Okon", role: "creator" },
-      { name: "Femi Ola", role: "marketing" },
-    ],
-    milestones: track("done", "done", "done", "now"),
-    updates: [
-      {
-        date: "Oct 4",
-        title: "Flagged 37 fake credit alerts in pilot shops",
-        body: "Zero false positives on real alerts so far.",
-      },
-      { date: "Oct 1", title: "Red-team week complete", body: "Every other team's product was tested by Daniel." },
-    ],
-  },
-  {
-    id: "harmattan",
-    name: "Harmattan",
-    initials: "Hm",
-    color: "#FF4D8F",
-    product: "Farmgate",
-    tagline: "Daily crop prices for smallholder farmers, by SMS.",
-    description:
-      "Farmgate collects prices from buyers in nearby markets and sends farmers the best place to sell each morning, no smartphone needed.",
-    score: 84.9,
-    votes: 1902,
-    prevRank: 5,
-    demo: "https://farmgate.demo.introtech.ng",
-    progress: { builder: 79, engineer: 72, security: 58, creator: 88, marketing: 80 },
-    members: [
-      { name: "Ngozi Ibe", role: "builder" },
-      { name: "Yakubu Garba", role: "engineer" },
-      { name: "Lanre Shittu", role: "security" },
-      { name: "Joy Udo", role: "creator" },
-      { name: "Kemi Fash", role: "marketing" },
-    ],
-    milestones: track("done", "done", "now", "next"),
-    updates: [
-      {
-        date: "Oct 3",
-        title: "Price feed covers 6 markets in Kaduna",
-        body: "Buyers update prices by replying to an SMS.",
-      },
-    ],
-  },
-  {
-    id: "okada",
-    name: "Okada Collective",
-    initials: "OC",
+    id: "confam",
+    name: "Confam",
+    initials: "CF",
     color: "#2BD4B4",
-    product: "RouteSense",
-    tagline: "Smarter dispatch for delivery riders in Lagos traffic.",
+    product: "Confam",
+    tagline: "Social-commerce escrow and motor-park delivery tracking in one link.",
     description:
-      "RouteSense groups deliveries and suggests rider routes using live traffic reports from the riders themselves.",
-    score: 81.3,
-    votes: 1287,
-    prevRank: 4,
-    demo: "https://routesense.demo.introtech.ng",
-    progress: { builder: 74, engineer: 69, security: 64, creator: 72, marketing: 77 },
-    members: [
-      { name: "Emeka Obi", role: "engineer" },
-      { name: "Sade Bankole", role: "builder" },
-      { name: "Ahmed Bala", role: "security" },
-      { name: "Tife Ojo", role: "creator" },
-      { name: "Uche Nnaji", role: "marketing" },
+      "Confam combines payment escrow, video-based order verification, and inter-state delivery tracking in a shareable web link. Buyers can lock funds without creating an account; sellers provide packing proof and a waybill, and buyers release payment after inspecting the delivery.",
+    problem:
+      "Buyers and sellers on social platforms face payment and delivery fraud, while informal motor-park shipments often have no reliable way to track a package after dispatch.",
+    features: [
+      "Proof-of-pack video: record or upload packing evidence, with SHA-256 hashing and AI video checks.",
+      "Waybill scanning and driver location sharing: extract delivery details from a waybill and let drivers share location through a browser link.",
+      "Paystack escrow and release OTP: hold payment until the buyer inspects the delivery and enters a release code.",
     ],
-    milestones: track("done", "now", "next", "next"),
-    updates: [{ date: "Oct 2", title: "Pilot with 12 riders in Yaba", body: "Average delivery time down 14 minutes." }],
-  },
-  {
-    id: "signal-noise",
-    name: "Signal & Noise",
-    initials: "SN",
-    color: "#C49BFF",
-    product: "Clinic Queue",
-    tagline: "SMS queueing and triage for primary health centres.",
-    description:
-      "Patients join the queue by SMS and get called back when it's their turn, so nobody waits outside all morning.",
-    score: 78.6,
-    votes: 964,
-    prevRank: 6,
-    demo: "https://clinicqueue.demo.introtech.ng",
-    progress: { builder: 68, engineer: 63, security: 71, creator: 60, marketing: 55 },
-    members: [
-      { name: "Funmi Alabi", role: "builder" },
-      { name: "Ikenna Eze", role: "engineer" },
-      { name: "Grace Akpan", role: "security" },
-      { name: "Bayo Lawal", role: "creator" },
-      { name: "Nkechi Obi", role: "marketing" },
-    ],
-    milestones: track("done", "now", "next", "next"),
-    updates: [{ date: "Oct 1", title: "Talking to two PHCs in Ibadan", body: "Testing starts next week." }],
+    difference:
+      "Confam is designed for informal motor-park deliveries rather than requiring expensive couriers. It combines pre-dispatch packing checks, waybill tracking, and escrow without requiring buyers or drivers to install an app or register.",
+    functional: ["User authentication", "Database"],
+    technologies: ["Google Gemini 3.8 Flash API", "Paystack API", "Browser Hardware APIs", "Web Crypto API"],
+    lead: "Akinyemi Emmanuel Oluwadamilare",
+    demo: "https://confamhq.vercel.app/",
+    repository: "https://github.com/confam-hq/confam",
   },
 ];
