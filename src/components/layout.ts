@@ -27,6 +27,16 @@ function initHeader(): void {
   toggle.addEventListener("click", () => setOpen(toggle.getAttribute("aria-expanded") !== "true"));
   document.addEventListener("keydown", (e) => e.key === "Escape" && setOpen(false));
   matchMedia("(min-width: 960px)").addEventListener("change", (e) => e.matches && setOpen(false));
+
+  menu.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => setOpen(false));
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!header.contains(e.target as Node) && toggle.getAttribute("aria-expanded") === "true") {
+      setOpen(false);
+    }
+  });
 }
 
 /**

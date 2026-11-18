@@ -200,11 +200,29 @@
 }
 
 .mobile-nav {
-  position: fixed;
-  inset: var(--header-h) 0 0;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: calc(100dvh - var(--header-h));
+  max-height: calc(100dvh - 100%);
   background: var(--bg);
   border-top: 1px solid var(--border);
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  z-index: 50;
+  box-shadow: 0 20px 40px rgb(0 0 0 / 0.5);
+}
+
+.mobile-nav[hidden] {
+  display: none !important;
+}
+
+@media (min-width: 960px) {
+  .mobile-nav {
+    display: none !important;
+  }
 }
 
 .mobile-nav .container {

@@ -37,17 +37,51 @@ bootPage("home", () => {
     )}`,
   );
 
-  const leader = teams[0];
-  if (leader) {
+  const STORAGE_KEY = "introtech_featured_index";
+  const getInitialFeaturedIndex = (length: number): number => {
+    if (length <= 1) return 0;
+    try {
+      const storage = window.localStorage ?? window.sessionStorage;
+      const stored = storage.getItem(STORAGE_KEY);
+      const lastIndex = stored !== null ? parseInt(stored, 10) : -1;
+      const nextIndex = isNaN(lastIndex) || lastIndex < 0
+        ? Math.floor(Math.random() * length)
+        : (lastIndex + 1) % length;
+      storage.setItem(STORAGE_KEY, String(nextIndex));
+      return nextIndex;
+    } catch {
+      return Math.floor(Math.random() * length);
+    }
+  };
+
+  let featuredIndex = getInitialFeaturedIndex(teams.length);
+
+  const renderFeatured = (idx: number) => {
+    const featured = teams[idx % teams.length];
+    if (!featured) return;
     render(
       qs("[data-featured-team]"),
-      html`${teamMark(leader, "md")}
+      html`${teamMark(featured, "md")}
         <div>
           <span class="float-card__kicker"><span class="live-dot"></span>Featured project</span>
-          <b>${leader.name}</b>
-          <span class="float-card__meta">${leader.product}</span>
+          <b>${featured.name}</b>
+          <span class="float-card__meta">${featured.product}</span>
         </div>`,
     );
+  };
+
+  if (teams.length > 0) {
+    renderFeatured(featuredIndex);
+
+    // Rotate every 30 minutes while the page remains open
+    const THIRTY_MINUTES_MS = 30 * 60 * 1000;
+    setInterval(() => {
+      featuredIndex = (featuredIndex + 1) % teams.length;
+      try {
+        (window.localStorage ?? window.sessionStorage).setItem(STORAGE_KEY, String(featuredIndex));
+      } catch {}
+      renderFeatured(featuredIndex);
+    }, THIRTY_MINUTES_MS);
   }
 
   const count = qs("[data-team-count]");

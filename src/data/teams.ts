@@ -27,7 +27,7 @@ export const TEAMS: readonly Team[] = [
   },
   {
     id: "el-nino",
-    name: "El Nino Team 8 (Buildathon Group 8)",
+    name: "El Nino",
     initials: "EN",
     color: "#4C9DFF",
     product: "El Nino",
