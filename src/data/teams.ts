@@ -73,4 +73,120 @@ export const TEAMS: readonly Team[] = [
     demo: "https://confamhq.vercel.app/",
     repository: "https://github.com/confam-hq/confam",
   },
+  {
+    id: "o-labs",
+    name: "O_Labs",
+    initials: "OL",
+    color: "#8B5CF6",
+    product: "KreatrDesk",
+    tagline: "Decentralized UGC commerce engine with smart contract escrows and multimodal AI QA.",
+    description:
+      "KreatrDesk is a decentralized UGC commerce and escrow platform connecting African brands with content creators. It replaces vanity metrics with zero-trust smart contract escrows on Base, automated AI deliverable validation against campaign briefs, and direct WhatsApp attribution links.",
+    problem:
+      "In emerging African markets, brands face high deposit loss from creator ghosting, pay substantial fees for vanity engagement that fails to convert to sales, and lack attribution tools. Concurrently, skilled creators without large followings are excluded from brand deals.",
+    features: [
+      "Dual-Rail Escrow Vaults: Secure escrow funding in local fiat Naira or Base Sepolia USDC, auto-releasing only upon verified milestone completion.",
+      "Multimodal Gemini AI Quality Assurance: Automated video evaluation verifying product visibility, audio clarity, and creative brief requirements prior to human payout approval.",
+      "5-Pillar Credibility & WhatsApp Attribution: Evaluates creators based on delivery reliability and creative quality rather than follower count, tracking sales through unique referral links.",
+    ],
+    difference:
+      "Bridges Web3 trustlessness and local African commerce by pairing Base L2 smart contract escrow vaults with dual-rail fiat Naira rails (via Roqqu), multimodal AI brief compliance checking, and conversion telemetry directly into WhatsApp.",
+    functional: ["User Authentication", "Core Dashboard", "Database", "Reporting & Analytics"],
+    technologies: [
+      "Google Gemini Multimodal (via OpenRouter)",
+      "Base Sepolia (Ethereum L2 Smart Contracts)",
+      "Roqqu API Services (RAS)",
+      "Cloudinary CDN",
+      "MongoDB Atlas / Mongoose",
+      "Viem / Wagmi & RainbowKit",
+    ],
+    lead: "Legend4tech",
+    demo: "https://kreatr-desk.vercel.app/",
+    repository: "https://github.com/legend4tech/KreatrDesk",
+  },
+  {
+    id: "aboyun",
+    name: "Aboyun",
+    initials: "AB",
+    color: "#EC4899",
+    product: "Aboyun",
+    tagline: "Offline-first multilingual maternal health platform reaching mothers via app, SMS, and USSD.",
+    description:
+      "Aboyun is an offline-first maternal health app designed for pregnant and nursing mothers in remote communities. It operates in indigenous languages (Pidgin, Hausa, Yoruba, Igbo, and English) across basic phones (SMS/USSD) and offline web apps, while equipping clinics with a triage dashboard to monitor high-risk patients.",
+    problem:
+      "Nigeria accounts for an estimated 28.5% of maternal deaths globally, primarily from preventable complications, missed clinic appointments, lack of local language guidance, and lack of internet access in rural communities.",
+    features: [
+      "Built for Every Phone & Language: Offline PWA capabilities plus SMS and USSD functionality supporting English, Pidgin, Hausa, Yoruba, and Igbo.",
+      "One-Touch Emergency Alert: 1-tap app trigger or USSD dial to notify healthcare providers, family members, and transport contacts concurrently.",
+      "Early Warning & Clinical Triage: Danger-sign assessments flag high-risk mothers dynamically on the clinic provider dashboard.",
+    ],
+    difference:
+      "Does not require a smartphone, active internet connection, or English literacy. Works across USSD, SMS, and offline PWA service workers, linking mothers, families, and clinic staff into a single notification and triaging loop.",
+    functional: ["User Authentication", "Core Dashboard", "Database", "Reporting & Analytics"],
+    technologies: [
+      "Africa's Talking API (USSD & SMS)",
+      "Resend API",
+      "Better Auth",
+      "PostgreSQL with Prisma",
+      "Next.js",
+      "Serwist & Dexie (IndexedDB Service Workers)",
+    ],
+    lead: "Godwin Emeribe",
+    demo: "https://aboyun.vercel.app/",
+    repository: "https://github.com/Godwin57/aboyun",
+  },
+  {
+    id: "kobog",
+    name: "KOBOG",
+    initials: "KB",
+    color: "#F97316",
+    product: "KOBOG",
+    tagline: "AI-powered organizational operating system for governed multi-agent workflows.",
+    description:
+      "KOBOG is an AI organizational operating system that allows enterprises to create, manage, and deploy specialized AI agents within a governed workspace. It combines long-term organizational memory, workflow automation, and role-based agent management to preserve institutional knowledge and scale operations.",
+    problem:
+      "Enterprises experience fragmented operational knowledge, disjointed software workflows, and a lack of unified governance, security, and administrative oversight when deploying AI assistants.",
+    features: [
+      "Persistent Organizational Memory: Centralized knowledge base ensuring AI agents retain organizational context and documentation over time.",
+      "Specialized AI Agent Management: Fine-grained creation and assignment of domain-specific agents with custom tool access and operational roles.",
+      "Governed Workflow Automation: Multi-agent orchestration with auditability and compliance guardrails aligned with enterprise objectives.",
+    ],
+    difference:
+      "Rather than functioning as an isolated point-solution chatbot or discrete automation pipeline, KOBOG serves as a unified multi-agent operating system incorporating persistent memory, role-based agent permissions, and organizational governance.",
+    functional: ["Core Dashboard"],
+    technologies: [
+      "Python",
+      "Supabase (PostgreSQL Auth & Database)",
+      "Model Context Protocol (MCP)",
+      "Obsidian Knowledge Management",
+      "Hermes Agent Orchestration",
+    ],
+    lead: "Okakoso Jeff",
+    demo: "https://kobogproject.lovable.app",
+    repository: "https://github.com/aweleokwuosa-sudo/kobog-intelligence-hub",
+  },
+  {
+    id: "skillbridge",
+    name: "SkillBridge",
+    initials: "SB",
+    color: "#0EA5E9",
+    product: "SkillBridge",
+    tagline: "Skill-to-income enablement platform connecting personal talents to market opportunities.",
+    description:
+      "SkillBridge is a career and skill monetization platform that helps individuals audit their existing abilities, match with market-viable income opportunities, upskill through guided roadmaps, and generate professional portfolios to attract clients.",
+    problem:
+      "Many individuals possess marketable skills but lack guidance on how to monetize them, which client segments need them, where their capability gaps lie, and how to effectively showcase their portfolio.",
+    features: [
+      "Skill Assessment & Opportunity Matching: Audits current user capabilities and suggests tailored income channels and client niches.",
+      "Personalized Learning Paths: Identifies specific skill deficits and prescribes structured micro-learning tracks.",
+      "Portfolio Builder: Streamlines the creation of client-facing project portfolios showcasing verified abilities and case studies.",
+    ],
+    difference:
+      "Unlike traditional ed-tech platforms that strictly focus on courses or job boards focused solely on openings, SkillBridge links the complete lifecycle from skill assessment and monetization matching to portfolio creation.",
+    functional: ["User Authentication", "Core Dashboard", "Database", "Reporting & Analytics"],
+    technologies: ["Python FastAPI (Backend API)", "Google Gemini API"],
+    lead: "Amadi Ogochukwu",
+    demo: "https://useskillbridge.vercel.app",
+    repository: "https://github.com/useskillbridge/skillbridge",
+  },
 ];
